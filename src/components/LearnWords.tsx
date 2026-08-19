@@ -6,10 +6,12 @@ import lexiBook from '../assets/lexi-book.png'
 
 interface Props {
   words: Word[]
+  blockNumber?: number
+  totalBlocks?: number
   onBack: () => void
 }
 
-export function LearnWords({ words, onBack }: Props) {
+export function LearnWords({ words, blockNumber, totalBlocks, onBack }: Props) {
   const [index, setIndex] = useState(0)
   const [showExit, setShowExit] = useState(false)
 
@@ -39,7 +41,11 @@ export function LearnWords({ words, onBack }: Props) {
         <img src={lexiBook} alt="Lexi с книгой" className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-lg flex-shrink-0" />
         <div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-purple-600">Учим слова!</h2>
-          <p className="text-sm text-gray-500">Запоминай и повторяй вслух</p>
+          <p className="text-sm text-gray-500">
+            {blockNumber && totalBlocks
+              ? `Блок ${blockNumber} из ${totalBlocks} · ${words.length} слов`
+              : `${words.length} слов · запоминай и повторяй вслух`}
+          </p>
         </div>
       </div>
 

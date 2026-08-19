@@ -6,9 +6,9 @@
 
 Редактируйте JSON-файлы в `public/data/`:
 
-- `words-to-learn.json` — слова для изучения
+- `words-to-learn.json` — блоки слов для изучения (один блок = одно занятие)
 - `words-learned.json` — уже выученные слова
-- `config.json` — имя ребенка и количество слов в день
+- `config.json` — имя ребенка
 - `rewards.json` — подарки за достижения
 
 Формат слова:
@@ -16,7 +16,20 @@
 { "en": "hello", "transcription": "хелоу", "ru": "привет" }
 ```
 
-Когда ребенок выучил слова — перенесите их из `words-to-learn.json` в `words-learned.json`.
+Формат блока в `words-to-learn.json` — массив массивов (5–10 слов по смыслу):
+```json
+[
+  [
+    { "en": "yes", "transcription": "йес", "ru": "да" },
+    { "en": "no", "transcription": "ноу", "ru": "нет" }
+  ],
+  [
+    { "en": "mom", "transcription": "мам", "ru": "мама" }
+  ]
+]
+```
+
+Когда ребенок выучил блок — перенесите все слова первого блока из `words-to-learn.json` в `words-learned.json` и удалите этот блок.
 
 ## Разработка
 

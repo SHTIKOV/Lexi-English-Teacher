@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import type { Word, AppConfig, Reward } from '../types'
+import type { Word, WordBlock, AppConfig, Reward } from '../types'
 
 const BASE = import.meta.env.BASE_URL
 
 export function useWords() {
-  const [wordsToLearn, setWordsToLearn] = useState<Word[]>([])
+  const [wordBlocks, setWordBlocks] = useState<WordBlock[]>([])
   const [wordsLearned, setWordsLearned] = useState<Word[]>([])
-  const [config, setConfig] = useState<AppConfig>({ childName: '', wordsPerDay: 5 })
+  const [config, setConfig] = useState<AppConfig>({ childName: '' })
   const [rewards, setRewards] = useState<Reward[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -16,8 +16,8 @@ export function useWords() {
       fetch(`${BASE}data/words-learned.json`).then(r => r.json()),
       fetch(`${BASE}data/config.json`).then(r => r.json()),
       fetch(`${BASE}data/rewards.json`).then(r => r.json()),
-    ]).then(([toLearn, learned, cfg, rw]) => {
-      setWordsToLearn(toLearn)
+    ]).then(([blocks, learned, cfg, rw]) => {
+      setWordBlocks(blocks)
       setWordsLearned(learned)
       setConfig(cfg)
       setRewards(rw)
@@ -25,13 +25,17 @@ export function useWords() {
     })
   }, [])
 
-  const currentWords = wordsToLearn.slice(0, config.wordsPerDay)
+  const currentBlock = wordBlocks[0] ?? []
+  const currentWords = currentBlock
+  const wordsToLearn = wordBlocks.flat()
   const allWords = [...wordsLearned, ...wordsToLearn]
   const totalLearned = wordsLearned.length
 
   return {
+    wordBlocks,
     wordsToLearn,
     wordsLearned,
+    currentBlock,
     currentWords,
     allWords,
     totalLearned,

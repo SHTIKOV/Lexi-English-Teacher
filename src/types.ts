@@ -14,8 +14,9 @@ export interface Reward {
 
 export interface AppConfig {
   childName: string
-  wordsPerDay: number
 }
+
+export type WordBlock = Word[]
 
 export interface Level {
   words: number

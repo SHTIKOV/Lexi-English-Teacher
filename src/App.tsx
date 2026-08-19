@@ -8,7 +8,7 @@ import { Rewards } from './components/Rewards'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
-  const { currentWords, allWords, totalLearned, config, rewards, loading } = useWords()
+  const { currentWords, wordBlocks, wordsLearned, allWords, totalLearned, config, rewards, loading } = useWords()
 
   if (loading) {
     return (
@@ -29,7 +29,12 @@ export default function App() {
         />
       )}
       {screen === 'learn' && (
-        <LearnWords words={currentWords} onBack={() => setScreen('home')} />
+        <LearnWords
+          words={currentWords}
+          blockNumber={wordBlocks.length > 0 ? 1 : undefined}
+          totalBlocks={wordBlocks.length > 0 ? wordBlocks.length : undefined}
+          onBack={() => setScreen('home')}
+        />
       )}
       {screen === 'quiz' && (
         <Quiz
@@ -41,8 +46,8 @@ export default function App() {
       )}
       {screen === 'play' && (
         <Quiz
-          words={allWords}
-          allWords={allWords}
+          words={wordsLearned}
+          allWords={wordsLearned}
           title="🎮 Играем!"
           questionCount={15}
           onBack={() => setScreen('home')}

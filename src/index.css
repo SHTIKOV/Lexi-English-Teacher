@@ -49,55 +49,47 @@
   .app-screen-bottom {
     padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
   }
+
+  .home-lexi {
+    height: min(46svh, 100%);
+    max-height: 100%;
+  }
 }
 
-/* Compact layout for tall-narrow phones (e.g. Samsung A72, ~780px height with browser chrome) */
+/* Compact layout for phones with browser chrome (e.g. Samsung A72) */
 @media (max-height: 780px) {
   html {
     font-size: 15px;
   }
 
-  .home-character img {
-    max-height: 34svh !important;
-    margin-bottom: 0 !important;
+  .home-lexi {
+    height: min(44svh, 100%) !important;
+    max-height: 100% !important;
   }
 
   .home-bubble {
-    padding: 0.5rem 0.75rem !important;
+    padding: 0.375rem 0.625rem !important;
   }
 
   .home-bubble p {
-    font-size: 0.8125rem !important;
-    line-height: 1.25 !important;
+    font-size: 0.75rem !important;
+    line-height: 1.2 !important;
   }
 
   .home-stats {
-    padding: 0.5rem 0.75rem !important;
+    padding: 0.375rem 0.625rem !important;
   }
 
   .home-stats p {
-    font-size: 0.75rem !important;
-    margin-bottom: 0.375rem !important;
+    font-size: 0.6875rem !important;
+    margin-bottom: 0.25rem !important;
   }
 
-  .home-buttons {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem !important;
-  }
-
-  .home-buttons .btn-main {
-    padding-top: 0.625rem !important;
-    padding-bottom: 0.625rem !important;
-    font-size: 0.8125rem !important;
-    border-radius: 1rem !important;
-  }
-
-  .home-buttons .btn-rewards {
-    grid-column: 1 / -1;
+  .home-buttons button {
     padding-top: 0.5rem !important;
     padding-bottom: 0.5rem !important;
     font-size: 0.8125rem !important;
+    border-radius: 0.875rem !important;
   }
 
   .quiz-option {
@@ -135,13 +127,8 @@
     font-size: 14px;
   }
 
-  .home-character img {
-    max-height: 28svh !important;
-  }
-
-  .home-motivation {
-    top: 36% !important;
-    transform: translateY(0) !important;
+  .home-lexi {
+    height: min(40svh, 100%) !important;
   }
 }
 

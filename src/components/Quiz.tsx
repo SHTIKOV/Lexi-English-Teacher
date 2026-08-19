@@ -24,14 +24,14 @@ export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
 
   if (words.length < 2) {
     return (
-      <div className="flex flex-col h-dvh max-w-lg mx-auto">
+      <div className="app-screen flex flex-col max-w-lg mx-auto">
         <div className="flex-1 flex flex-col items-center justify-center px-4">
           <p className="text-5xl mb-4">😅</p>
           <p className="text-xl font-bold text-purple-600 text-center">
             Нужно хотя бы 2 слова для проверки!
           </p>
         </div>
-        <div className="flex-shrink-0 px-4 pb-5">
+        <div className="flex-shrink-0 app-screen-x app-screen-bottom">
           <button onClick={onBack} className="w-full py-4 rounded-2xl text-lg font-bold text-white bg-gradient-to-r from-pink-400 to-purple-500 shadow-lg active:scale-95 transition-transform cursor-pointer">
             🏠 Главное меню
           </button>
@@ -44,7 +44,7 @@ export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
     const percent = Math.round((score / total) * 100)
     const great = percent >= 80
     return (
-      <div className="flex flex-col h-dvh max-w-lg mx-auto">
+      <div className="app-screen flex flex-col max-w-lg mx-auto">
         <div className="flex-1 flex flex-col items-center justify-center px-4">
           {great && <Confetti />}
           {great ? (
@@ -64,7 +64,7 @@ export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
             </p>
           </div>
         </div>
-        <div className="flex-shrink-0 px-4 pb-5 pt-3 flex flex-col gap-3">
+        <div className="flex-shrink-0 app-screen-x app-screen-bottom pt-2 sm:pt-3 flex flex-col gap-2 sm:gap-3">
           <button onClick={reset} className="w-full py-4 rounded-2xl text-lg font-bold text-white bg-gradient-to-r from-green-400 to-emerald-500 shadow-lg active:scale-95 transition-transform cursor-pointer">
             🔄 Ещё раз
           </button>
@@ -88,10 +88,10 @@ export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
   const isWrong = answered !== null && !isCorrect
 
   return (
-    <div className="flex flex-col h-dvh max-w-lg mx-auto">
+    <div className="app-screen flex flex-col max-w-lg mx-auto">
       {showExit && <ExitConfirm onConfirm={onBack} onCancel={() => setShowExit(false)} />}
       {/* Header */}
-      <div className="flex-shrink-0 flex items-center justify-between px-4 pt-4 pb-2">
+      <div className="flex-shrink-0 flex items-center justify-between app-screen-x pt-3 sm:pt-4 pb-1 sm:pb-2">
         <h2 className="text-xl sm:text-2xl font-extrabold text-purple-600">{title}</h2>
         <span className="text-sm text-gray-400 bg-white/60 rounded-full px-3 py-1">
           {currentIndex + 1}/{total}
@@ -99,8 +99,8 @@ export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
       </div>
 
       {/* Question pinned to top */}
-      <div className="flex-shrink-0 px-4 pt-2 pb-3">
-        <div className="bg-white/70 rounded-3xl p-5 sm:p-6 shadow-lg text-center w-full">
+      <div className="flex-shrink-0 app-screen-x pt-1 sm:pt-2 pb-2 sm:pb-3">
+        <div className="quiz-question bg-white/70 rounded-3xl p-4 sm:p-6 shadow-lg text-center w-full">
           {current.reverse ? (
             <>
               <p className="text-sm text-gray-400 mb-1">Как будет по-русски:</p>
@@ -117,12 +117,12 @@ export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
       </div>
 
       {/* Options */}
-      <div className="flex-1 flex flex-col justify-center px-4 min-h-0 overflow-hidden">
-        <div className="relative w-full flex-shrink-0">
-          <div className="grid grid-cols-1 gap-3 w-full">
+      <div className="flex-1 flex flex-col justify-center app-screen-x min-h-0 overflow-y-auto overscroll-contain">
+        <div className="relative w-full flex-shrink-0 py-1">
+          <div className="grid grid-cols-1 gap-2 sm:gap-3 w-full">
             {current.options.map((opt, i) => {
               let classes =
-                'w-full py-4 px-5 rounded-2xl text-center shadow-md transition-colors cursor-pointer '
+                'quiz-option w-full py-3 sm:py-4 px-4 sm:px-5 rounded-2xl text-center shadow-md transition-colors cursor-pointer '
               if (answered === null) {
                 classes += 'bg-white active:scale-95 text-gray-700'
               } else if (i === current.correctIndex) {
@@ -165,7 +165,7 @@ export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
       </div>
 
       {/* Buttons pinned to bottom */}
-      <div className="flex-shrink-0 px-4 pb-5 pt-3 flex flex-col gap-3">
+      <div className="flex-shrink-0 app-screen-x app-screen-bottom pt-2 sm:pt-3 flex flex-col gap-2 sm:gap-3">
         <button
           onClick={next}
           disabled={answered === null}

@@ -16,13 +16,132 @@
   }
   html {
     font-size: 16px;
-    overflow-x: hidden;
+    overflow: hidden;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   body {
     font-family: 'Nunito', sans-serif;
     background: linear-gradient(135deg, #fce4ec 0%, #e3f2fd 50%, #fff9c4 100%);
-    min-height: 100dvh;
-    overflow-x: hidden;
+    height: 100svh;
+    max-height: 100dvh;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .app-screen {
+    height: 100svh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .app-screen-x {
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
+  }
+
+  .app-screen-bottom {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Compact layout for tall-narrow phones (e.g. Samsung A72, ~780px height with browser chrome) */
+@media (max-height: 780px) {
+  html {
+    font-size: 15px;
+  }
+
+  .home-character img {
+    max-height: 34svh !important;
+    margin-bottom: 0 !important;
+  }
+
+  .home-bubble {
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  .home-bubble p {
+    font-size: 0.8125rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .home-stats {
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  .home-stats p {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.375rem !important;
+  }
+
+  .home-buttons {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem !important;
+  }
+
+  .home-buttons .btn-main {
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+    font-size: 0.8125rem !important;
+    border-radius: 1rem !important;
+  }
+
+  .home-buttons .btn-rewards {
+    grid-column: 1 / -1;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .quiz-option {
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+  }
+
+  .quiz-option span {
+    font-size: 1rem !important;
+  }
+
+  .quiz-question {
+    padding: 0.875rem !important;
+  }
+
+  .quiz-question .text-3xl {
+    font-size: 1.5rem !important;
+  }
+
+  .word-card {
+    padding: 1rem !important;
+  }
+
+  .word-card .text-4xl {
+    font-size: 1.75rem !important;
+  }
+
+  .word-card .text-2xl {
+    font-size: 1.25rem !important;
+  }
+}
+
+@media (max-height: 680px) {
+  html {
+    font-size: 14px;
+  }
+
+  .home-character img {
+    max-height: 28svh !important;
+  }
+
+  .home-motivation {
+    top: 36% !important;
+    transform: translateY(0) !important;
   }
 }
 

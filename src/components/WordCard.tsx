@@ -8,7 +8,7 @@ interface Props {
 
 export function WordCard({ word, index, total }: Props) {
   return (
-    <div className="animate-bounce-in bg-white rounded-3xl shadow-xl p-6 sm:p-8 w-full text-center">
+    <div className="word-card animate-bounce-in bg-white rounded-3xl shadow-xl p-5 sm:p-8 w-full text-center">
       <p className="text-sm text-gray-400 mb-2">
         {index + 1} / {total}
       </p>

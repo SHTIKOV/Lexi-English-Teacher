@@ -17,14 +17,14 @@ export function LearnWords({ words, blockNumber, totalBlocks, onBack }: Props) {
 
   if (words.length === 0) {
     return (
-      <div className="flex flex-col h-dvh max-w-lg mx-auto">
+      <div className="app-screen flex flex-col max-w-lg mx-auto">
         <div className="flex-1 flex flex-col items-center justify-center px-4">
           <img src={lexiBook} alt="Lexi" className="w-36 h-36 object-contain drop-shadow-lg mb-4" />
           <p className="text-2xl font-bold text-purple-600 text-center">
             Все слова выучены! Ты молодец!
           </p>
         </div>
-        <div className="flex-shrink-0 px-4 pb-5">
+        <div className="flex-shrink-0 app-screen-x app-screen-bottom">
           <button onClick={onBack} className="w-full py-4 rounded-2xl text-lg font-bold text-gray-600 bg-white/80 shadow active:scale-95 transition-transform cursor-pointer">
             🏠 Главное меню
           </button>
@@ -34,11 +34,11 @@ export function LearnWords({ words, blockNumber, totalBlocks, onBack }: Props) {
   }
 
   return (
-    <div className="flex flex-col h-dvh max-w-lg mx-auto">
+    <div className="app-screen flex flex-col max-w-lg mx-auto">
       {showExit && <ExitConfirm onConfirm={onBack} onCancel={() => setShowExit(false)} />}
 
-      <div className="flex-shrink-0 flex items-center gap-3 px-4 pt-4 pb-2">
-        <img src={lexiBook} alt="Lexi с книгой" className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-lg flex-shrink-0" />
+      <div className="flex-shrink-0 flex items-center gap-2 sm:gap-3 app-screen-x pt-3 sm:pt-4 pb-1 sm:pb-2">
+        <img src={lexiBook} alt="Lexi с книгой" className="w-14 h-14 sm:w-20 sm:h-20 object-contain drop-shadow-lg flex-shrink-0" />
         <div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-purple-600">Учим слова!</h2>
           <p className="text-sm text-gray-500">
@@ -49,11 +49,11 @@ export function LearnWords({ words, blockNumber, totalBlocks, onBack }: Props) {
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-4 min-h-0">
+      <div className="flex-1 flex items-center justify-center app-screen-x min-h-0 overflow-y-auto overscroll-contain">
         <WordCard word={words[index]} index={index} total={words.length} />
       </div>
 
-      <div className="flex-shrink-0 px-4 pb-5 pt-3 flex flex-col gap-3">
+      <div className="flex-shrink-0 app-screen-x app-screen-bottom pt-2 sm:pt-3 flex flex-col gap-2 sm:gap-3">
         <div className="flex gap-3">
           <button
             onClick={() => setIndex(i => Math.max(0, i - 1))}

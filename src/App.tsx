@@ -12,14 +12,14 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="app-screen flex items-center justify-center">
         <p className="text-3xl animate-float">🌟</p>
       </div>
     )
   }
 
   return (
-    <div className="min-h-dvh">
+    <div className="app-screen overflow-hidden">
       {screen === 'home' && (
         <HomeScreen
           config={config}

@@ -16,7 +16,7 @@ export function Rewards({ rewards, learnedCount, onBack }: Props) {
   }, [rewards])
 
   return (
-    <div className="flex flex-col h-dvh max-w-lg mx-auto">
+    <div className="app-screen flex flex-col max-w-lg mx-auto">
       {activeReward && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-6 animate-bounce-in">
           <div
@@ -85,13 +85,13 @@ export function Rewards({ rewards, learnedCount, onBack }: Props) {
       )}
 
       {/* Header */}
-      <div className="flex-shrink-0 px-4 pt-4 pb-2 text-center">
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-amber-600">🎁 Мои подарки</h2>
+      <div className="flex-shrink-0 app-screen-x pt-3 sm:pt-4 pb-1 sm:pb-2 text-center">
+        <h2 className="text-xl sm:text-3xl font-extrabold text-amber-600">🎁 Мои подарки</h2>
         <p className="text-gray-500 text-sm">Учи слова и зарабатывай подарки!</p>
       </div>
 
       {/* Rewards list scrollable */}
-      <div className="flex-1 overflow-y-auto px-4 min-h-0">
+      <div className="flex-1 overflow-y-auto app-screen-x min-h-0 overscroll-contain">
         <div className="flex flex-col gap-3 py-2">
           {rewards.map(r => {
             const unlocked = learnedCount >= r.words
@@ -157,7 +157,7 @@ export function Rewards({ rewards, learnedCount, onBack }: Props) {
       </div>
 
       {/* Button pinned to bottom */}
-      <div className="flex-shrink-0 px-4 pb-5 pt-3">
+      <div className="flex-shrink-0 app-screen-x app-screen-bottom pt-2 sm:pt-3">
         <button
           onClick={onBack}
           className="w-full py-4 rounded-2xl text-lg font-bold text-gray-600 bg-white/80 shadow active:scale-95 transition-transform cursor-pointer"

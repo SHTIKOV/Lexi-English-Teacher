@@ -1,0 +1,11 @@
+[
+  { "en": "I", "transcription": "ай", "ru": "я" },
+  { "en": "you", "transcription": "ю", "ru": "ты" },
+  { "en": "he", "transcription": "хи", "ru": "он" },
+  { "en": "she", "transcription": "ши", "ru": "она" },
+  { "en": "it", "transcription": "ит", "ru": "оно" },
+  { "en": "we", "transcription": "ви", "ru": "мы" },
+  { "en": "they", "transcription": "зей", "ru": "они" },
+  { "en": "my", "transcription": "май", "ru": "мой" },
+  { "en": "your", "transcription": "ёр", "ru": "твой" }
+]

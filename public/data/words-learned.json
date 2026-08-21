@@ -118,5 +118,40 @@
     "en": "family",
     "transcription": "фэмили",
     "ru": "семья"
+  },
+  {
+    "en": "friend",
+    "transcription": "фрэнд",
+    "ru": "друг"
+  },
+  {
+    "en": "man",
+    "transcription": "мэн",
+    "ru": "мужчина"
+  },
+  {
+    "en": "woman",
+    "transcription": "вумэн",
+    "ru": "женщина"
+  },
+  {
+    "en": "boy",
+    "transcription": "бой",
+    "ru": "мальчик"
+  },
+  {
+    "en": "girl",
+    "transcription": "гёрл",
+    "ru": "девочка"
+  },
+  {
+    "en": "child",
+    "transcription": "чайлд",
+    "ru": "ребёнок"
+  },
+  {
+    "en": "people",
+    "transcription": "пипл",
+    "ru": "люди"
   }
 ]

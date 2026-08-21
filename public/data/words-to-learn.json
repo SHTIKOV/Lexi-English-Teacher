@@ -1,48 +1,6 @@
 [
   [
     {
-      "en": "mom",
-      "transcription": "мам",
-      "ru": "мама"
-    },
-    {
-      "en": "dad",
-      "transcription": "дэд",
-      "ru": "папа"
-    },
-    {
-      "en": "brother",
-      "transcription": "бразер",
-      "ru": "брат"
-    },
-    {
-      "en": "sister",
-      "transcription": "систер",
-      "ru": "сестра"
-    },
-    {
-      "en": "son",
-      "transcription": "сан",
-      "ru": "сын"
-    },
-    {
-      "en": "daughter",
-      "transcription": "дотер",
-      "ru": "дочь"
-    },
-    {
-      "en": "baby",
-      "transcription": "бэйби",
-      "ru": "малыш"
-    },
-    {
-      "en": "family",
-      "transcription": "фэмили",
-      "ru": "семья"
-    }
-  ],
-  [
-    {
       "en": "friend",
       "transcription": "фрэнд",
       "ru": "друг"

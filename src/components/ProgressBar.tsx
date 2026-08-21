@@ -7,18 +7,9 @@ interface Props {
 
 export function ProgressBar({ learnedCount, rewards }: Props) {
   const nextReward = rewards.find(r => learnedCount < r.words)
-  const prevReward = rewards
-    .slice()
-    .reverse()
-    .find(r => learnedCount >= r.words) ?? null
-
-  const prevWords = prevReward?.words ?? 0
-  const nextWords = nextReward?.words ?? prevWords
-  const targetWords = nextReward ? nextWords - prevWords : 0
-  const progressWords = learnedCount - prevWords
 
   const progressPct = nextReward
-    ? (progressWords / targetWords) * 100
+    ? Math.min(100, (learnedCount / nextReward.words) * 100)
     : 100
 
   const label = nextReward
@@ -38,10 +29,10 @@ export function ProgressBar({ learnedCount, rewards }: Props) {
       <div className="w-full bg-white/60 rounded-full h-5 sm:h-6 overflow-hidden shadow-inner">
         <div
           className="h-full bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 rounded-full transition-all duration-1000 ease-out flex items-center justify-end pr-2"
-          style={{ width: `${Math.max(progressPct, 8)}%` }}
+          style={{ width: `${Math.max(progressPct, learnedCount > 0 ? 8 : 0)}%` }}
         >
           <span className="text-[10px] sm:text-xs text-white font-bold drop-shadow">
-            {nextReward ? `${Math.max(progressWords, 0)}` : learnedCount}
+            {learnedCount}
           </span>
         </div>
       </div>

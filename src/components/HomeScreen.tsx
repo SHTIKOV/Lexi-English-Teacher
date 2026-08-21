@@ -17,13 +17,6 @@ export function HomeScreen({ config, learnedCount, rewards, onNavigate }: Props)
     []
   )
   const nextReward = rewards.find(r => learnedCount < r.words)
-  const prevReward = rewards
-    .slice()
-    .reverse()
-    .find(r => learnedCount >= r.words) ?? null
-  const prevWords = prevReward?.words ?? 0
-  const targetWords = nextReward ? nextReward.words - prevWords : 0
-  const progressWords = nextReward ? learnedCount - prevWords : learnedCount
 
   return (
     <div className="home-screen app-screen flex flex-col max-w-lg mx-auto">
@@ -61,9 +54,11 @@ export function HomeScreen({ config, learnedCount, rewards, onNavigate }: Props)
         <div className="home-stats bg-white/70 backdrop-blur rounded-2xl p-2 sm:p-3 shadow-lg">
           {nextReward ? (
             <p className="text-center text-xs sm:text-base text-gray-600 mb-1 sm:mb-2 line-clamp-2">
-              Прогресс к подарку «{nextReward.title}»:{' '}
-              <span className="font-extrabold text-purple-600 text-sm sm:text-xl">{Math.max(progressWords, 0)}</span>{' '}
-              из <span className="font-bold text-gray-700">{targetWords}</span> слов
+              Выучено{' '}
+              <span className="font-extrabold text-purple-600 text-sm sm:text-xl">{learnedCount}</span>
+              {' '}из{' '}
+              <span className="font-bold text-gray-700">{nextReward.words}</span>
+              {' '}слов до подарка «{nextReward.title}»
             </p>
           ) : (
             <p className="text-center text-xs sm:text-base text-gray-600 mb-1 sm:mb-2">

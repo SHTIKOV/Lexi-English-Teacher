@@ -4,11 +4,12 @@ import { useWords } from './hooks/useWords'
 import { HomeScreen } from './components/HomeScreen'
 import { LearnWords } from './components/LearnWords'
 import { Quiz } from './components/Quiz'
+import { Library } from './components/Library'
 import { Rewards } from './components/Rewards'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
-  const { currentWords, wordBlocks, wordsLearned, allWords, totalLearned, config, rewards, loading } = useWords()
+  const { currentWords, wordBlocks, learnedBlocks, wordsLearned, allWords, totalLearned, config, rewards, loading } = useWords()
 
   if (loading) {
     return (
@@ -50,6 +51,12 @@ export default function App() {
           allWords={wordsLearned}
           title="🎮 Играем!"
           questionCount={15}
+          onBack={() => setScreen('home')}
+        />
+      )}
+      {screen === 'library' && (
+        <Library
+          blocks={learnedBlocks}
           onBack={() => setScreen('home')}
         />
       )}

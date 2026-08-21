@@ -91,6 +91,12 @@ export function HomeScreen({ config, learnedCount, rewards, onNavigate }: Props)
             🎮 Играть
           </button>
           <button
+            onClick={() => onNavigate('library')}
+            className="w-full py-2 sm:py-4 rounded-2xl sm:rounded-3xl text-sm sm:text-lg font-extrabold text-indigo-700 bg-gradient-to-r from-indigo-100 to-sky-200 shadow-lg sm:shadow-xl ring-1 ring-white/30 active:scale-95 transition-transform cursor-pointer"
+          >
+            📖 Моя библиотека
+          </button>
+          <button
             onClick={() => onNavigate('rewards')}
             className="w-full py-2 sm:py-4 rounded-2xl sm:rounded-3xl text-sm sm:text-lg font-extrabold text-amber-800 bg-gradient-to-r from-yellow-100 to-amber-300 shadow-lg sm:shadow-xl ring-1 ring-white/30 active:scale-95 transition-transform animate-pulse-glow cursor-pointer"
           >

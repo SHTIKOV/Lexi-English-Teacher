@@ -1,58 +1,6 @@
 [
   [
     {
-      "en": "one",
-      "transcription": "ван",
-      "ru": "один"
-    },
-    {
-      "en": "two",
-      "transcription": "ту",
-      "ru": "два"
-    },
-    {
-      "en": "three",
-      "transcription": "сри",
-      "ru": "три"
-    },
-    {
-      "en": "four",
-      "transcription": "фор",
-      "ru": "четыре"
-    },
-    {
-      "en": "five",
-      "transcription": "файв",
-      "ru": "пять"
-    },
-    {
-      "en": "six",
-      "transcription": "сикс",
-      "ru": "шесть"
-    },
-    {
-      "en": "seven",
-      "transcription": "сэвен",
-      "ru": "семь"
-    },
-    {
-      "en": "eight",
-      "transcription": "эйт",
-      "ru": "восемь"
-    },
-    {
-      "en": "nine",
-      "transcription": "найн",
-      "ru": "девять"
-    },
-    {
-      "en": "ten",
-      "transcription": "тэн",
-      "ru": "десять"
-    }
-  ],
-  [
-    {
       "en": "red",
       "transcription": "рэд",
       "ru": "красный"

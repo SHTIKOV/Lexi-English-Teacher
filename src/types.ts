@@ -18,10 +18,15 @@ export interface AppConfig {
 
 export type WordBlock = Word[]
 
+export interface LearnedBlock {
+  title: string
+  words: Word[]
+}
+
 export interface Level {
   words: number
   label: string
   emoji: string
 }
 
-export type Screen = 'home' | 'learn' | 'quiz' | 'play' | 'rewards'
+export type Screen = 'home' | 'learn' | 'quiz' | 'play' | 'rewards' | 'library'

@@ -1,157 +1,232 @@
 [
   {
-    "en": "I",
-    "transcription": "ай",
-    "ru": "я"
+    "title": "Местоимения",
+    "words": [
+      {
+        "en": "I",
+        "transcription": "ай",
+        "ru": "я"
+      },
+      {
+        "en": "you",
+        "transcription": "ю",
+        "ru": "ты"
+      },
+      {
+        "en": "he",
+        "transcription": "хи",
+        "ru": "он"
+      },
+      {
+        "en": "she",
+        "transcription": "ши",
+        "ru": "она"
+      },
+      {
+        "en": "it",
+        "transcription": "ит",
+        "ru": "оно"
+      },
+      {
+        "en": "we",
+        "transcription": "ви",
+        "ru": "мы"
+      },
+      {
+        "en": "they",
+        "transcription": "зей",
+        "ru": "они"
+      },
+      {
+        "en": "my",
+        "transcription": "май",
+        "ru": "мой"
+      },
+      {
+        "en": "your",
+        "transcription": "ёр",
+        "ru": "твой"
+      }
+    ]
   },
   {
-    "en": "you",
-    "transcription": "ю",
-    "ru": "ты"
+    "title": "Приветствия",
+    "words": [
+      {
+        "en": "yes",
+        "transcription": "йес",
+        "ru": "да"
+      },
+      {
+        "en": "no",
+        "transcription": "ноу",
+        "ru": "нет"
+      },
+      {
+        "en": "hello",
+        "transcription": "хелоу",
+        "ru": "привет"
+      },
+      {
+        "en": "goodbye",
+        "transcription": "гудбай",
+        "ru": "пока"
+      },
+      {
+        "en": "please",
+        "transcription": "плиз",
+        "ru": "пожалуйста"
+      },
+      {
+        "en": "thank you",
+        "transcription": "сэнк ю",
+        "ru": "спасибо"
+      },
+      {
+        "en": "sorry",
+        "transcription": "сори",
+        "ru": "извини"
+      }
+    ]
   },
   {
-    "en": "he",
-    "transcription": "хи",
-    "ru": "он"
+    "title": "Семья",
+    "words": [
+      {
+        "en": "mom",
+        "transcription": "мам",
+        "ru": "мама"
+      },
+      {
+        "en": "dad",
+        "transcription": "дэд",
+        "ru": "папа"
+      },
+      {
+        "en": "brother",
+        "transcription": "бразер",
+        "ru": "брат"
+      },
+      {
+        "en": "sister",
+        "transcription": "систер",
+        "ru": "сестра"
+      },
+      {
+        "en": "son",
+        "transcription": "сан",
+        "ru": "сын"
+      },
+      {
+        "en": "daughter",
+        "transcription": "дотер",
+        "ru": "дочь"
+      },
+      {
+        "en": "baby",
+        "transcription": "бэйби",
+        "ru": "малыш"
+      },
+      {
+        "en": "family",
+        "transcription": "фэмили",
+        "ru": "семья"
+      }
+    ]
   },
   {
-    "en": "she",
-    "transcription": "ши",
-    "ru": "она"
+    "title": "Люди",
+    "words": [
+      {
+        "en": "friend",
+        "transcription": "фрэнд",
+        "ru": "друг"
+      },
+      {
+        "en": "man",
+        "transcription": "мэн",
+        "ru": "мужчина"
+      },
+      {
+        "en": "woman",
+        "transcription": "вумэн",
+        "ru": "женщина"
+      },
+      {
+        "en": "boy",
+        "transcription": "бой",
+        "ru": "мальчик"
+      },
+      {
+        "en": "girl",
+        "transcription": "гёрл",
+        "ru": "девочка"
+      },
+      {
+        "en": "child",
+        "transcription": "чайлд",
+        "ru": "ребёнок"
+      },
+      {
+        "en": "people",
+        "transcription": "пипл",
+        "ru": "люди"
+      }
+    ]
   },
   {
-    "en": "it",
-    "transcription": "ит",
-    "ru": "оно"
-  },
-  {
-    "en": "we",
-    "transcription": "ви",
-    "ru": "мы"
-  },
-  {
-    "en": "they",
-    "transcription": "зей",
-    "ru": "они"
-  },
-  {
-    "en": "my",
-    "transcription": "май",
-    "ru": "мой"
-  },
-  {
-    "en": "your",
-    "transcription": "ёр",
-    "ru": "твой"
-  },
-  {
-    "en": "yes",
-    "transcription": "йес",
-    "ru": "да"
-  },
-  {
-    "en": "no",
-    "transcription": "ноу",
-    "ru": "нет"
-  },
-  {
-    "en": "hello",
-    "transcription": "хелоу",
-    "ru": "привет"
-  },
-  {
-    "en": "goodbye",
-    "transcription": "гудбай",
-    "ru": "пока"
-  },
-  {
-    "en": "please",
-    "transcription": "плиз",
-    "ru": "пожалуйста"
-  },
-  {
-    "en": "thank you",
-    "transcription": "сэнк ю",
-    "ru": "спасибо"
-  },
-  {
-    "en": "sorry",
-    "transcription": "сори",
-    "ru": "извини"
-  },
-  {
-    "en": "mom",
-    "transcription": "мам",
-    "ru": "мама"
-  },
-  {
-    "en": "dad",
-    "transcription": "дэд",
-    "ru": "папа"
-  },
-  {
-    "en": "brother",
-    "transcription": "бразер",
-    "ru": "брат"
-  },
-  {
-    "en": "sister",
-    "transcription": "систер",
-    "ru": "сестра"
-  },
-  {
-    "en": "son",
-    "transcription": "сан",
-    "ru": "сын"
-  },
-  {
-    "en": "daughter",
-    "transcription": "дотер",
-    "ru": "дочь"
-  },
-  {
-    "en": "baby",
-    "transcription": "бэйби",
-    "ru": "малыш"
-  },
-  {
-    "en": "family",
-    "transcription": "фэмили",
-    "ru": "семья"
-  },
-  {
-    "en": "friend",
-    "transcription": "фрэнд",
-    "ru": "друг"
-  },
-  {
-    "en": "man",
-    "transcription": "мэн",
-    "ru": "мужчина"
-  },
-  {
-    "en": "woman",
-    "transcription": "вумэн",
-    "ru": "женщина"
-  },
-  {
-    "en": "boy",
-    "transcription": "бой",
-    "ru": "мальчик"
-  },
-  {
-    "en": "girl",
-    "transcription": "гёрл",
-    "ru": "девочка"
-  },
-  {
-    "en": "child",
-    "transcription": "чайлд",
-    "ru": "ребёнок"
-  },
-  {
-    "en": "people",
-    "transcription": "пипл",
-    "ru": "люди"
+    "title": "Числа",
+    "words": [
+      {
+        "en": "one",
+        "transcription": "ван",
+        "ru": "один"
+      },
+      {
+        "en": "two",
+        "transcription": "ту",
+        "ru": "два"
+      },
+      {
+        "en": "three",
+        "transcription": "сри",
+        "ru": "три"
+      },
+      {
+        "en": "four",
+        "transcription": "фор",
+        "ru": "четыре"
+      },
+      {
+        "en": "five",
+        "transcription": "файв",
+        "ru": "пять"
+      },
+      {
+        "en": "six",
+        "transcription": "сикс",
+        "ru": "шесть"
+      },
+      {
+        "en": "seven",
+        "transcription": "сэвен",
+        "ru": "семь"
+      },
+      {
+        "en": "eight",
+        "transcription": "эйт",
+        "ru": "восемь"
+      },
+      {
+        "en": "nine",
+        "transcription": "найн",
+        "ru": "девять"
+      },
+      {
+        "en": "ten",
+        "transcription": "тэн",
+        "ru": "десять"
+      }
+    ]
   }
 ]

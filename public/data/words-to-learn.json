@@ -1,43 +1,6 @@
 [
   [
     {
-      "en": "yes",
-      "transcription": "йес",
-      "ru": "да"
-    },
-    {
-      "en": "no",
-      "transcription": "ноу",
-      "ru": "нет"
-    },
-    {
-      "en": "hello",
-      "transcription": "хелоу",
-      "ru": "привет"
-    },
-    {
-      "en": "goodbye",
-      "transcription": "гудбай",
-      "ru": "пока"
-    },
-    {
-      "en": "please",
-      "transcription": "плиз",
-      "ru": "пожалуйста"
-    },
-    {
-      "en": "thank you",
-      "transcription": "сэнк ю",
-      "ru": "спасибо"
-    },
-    {
-      "en": "sorry",
-      "transcription": "сори",
-      "ru": "извини"
-    }
-  ],
-  [
-    {
       "en": "mom",
       "transcription": "мам",
       "ru": "мама"

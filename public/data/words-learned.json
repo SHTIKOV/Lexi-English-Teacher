@@ -1,11 +1,82 @@
 [
-  { "en": "I", "transcription": "ай", "ru": "я" },
-  { "en": "you", "transcription": "ю", "ru": "ты" },
-  { "en": "he", "transcription": "хи", "ru": "он" },
-  { "en": "she", "transcription": "ши", "ru": "она" },
-  { "en": "it", "transcription": "ит", "ru": "оно" },
-  { "en": "we", "transcription": "ви", "ru": "мы" },
-  { "en": "they", "transcription": "зей", "ru": "они" },
-  { "en": "my", "transcription": "май", "ru": "мой" },
-  { "en": "your", "transcription": "ёр", "ru": "твой" }
+  {
+    "en": "I",
+    "transcription": "ай",
+    "ru": "я"
+  },
+  {
+    "en": "you",
+    "transcription": "ю",
+    "ru": "ты"
+  },
+  {
+    "en": "he",
+    "transcription": "хи",
+    "ru": "он"
+  },
+  {
+    "en": "she",
+    "transcription": "ши",
+    "ru": "она"
+  },
+  {
+    "en": "it",
+    "transcription": "ит",
+    "ru": "оно"
+  },
+  {
+    "en": "we",
+    "transcription": "ви",
+    "ru": "мы"
+  },
+  {
+    "en": "they",
+    "transcription": "зей",
+    "ru": "они"
+  },
+  {
+    "en": "my",
+    "transcription": "май",
+    "ru": "мой"
+  },
+  {
+    "en": "your",
+    "transcription": "ёр",
+    "ru": "твой"
+  },
+  {
+    "en": "yes",
+    "transcription": "йес",
+    "ru": "да"
+  },
+  {
+    "en": "no",
+    "transcription": "ноу",
+    "ru": "нет"
+  },
+  {
+    "en": "hello",
+    "transcription": "хелоу",
+    "ru": "привет"
+  },
+  {
+    "en": "goodbye",
+    "transcription": "гудбай",
+    "ru": "пока"
+  },
+  {
+    "en": "please",
+    "transcription": "плиз",
+    "ru": "пожалуйста"
+  },
+  {
+    "en": "thank you",
+    "transcription": "сэнк ю",
+    "ru": "спасибо"
+  },
+  {
+    "en": "sorry",
+    "transcription": "сори",
+    "ru": "извини"
+  }
 ]

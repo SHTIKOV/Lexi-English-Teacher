@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react'
-import type { Reward } from '../types'
+import { useEffect, useMemo, useState } from 'react'
+import type { Reward, RewardPhoto } from '../types'
+import { PhotoSlider } from './PhotoSlider'
 
 interface Props {
   rewards: Reward[]
@@ -7,32 +8,44 @@ interface Props {
   onBack: () => void
 }
 
+const BASE = import.meta.env.BASE_URL
+
 export function Rewards({ rewards, learnedCount, onBack }: Props) {
   const [activeReward, setActiveReward] = useState<Reward | null>(null)
+  const [hogwartsPhotos, setHogwartsPhotos] = useState<RewardPhoto[]>([])
 
   const superWords = useMemo(() => {
     if (!rewards.length) return 0
     return Math.max(...rewards.map(r => r.words))
   }, [rewards])
 
+  useEffect(() => {
+    fetch(`${BASE}data/hogwarts-photos.json`)
+      .then(r => r.json())
+      .then((photos: RewardPhoto[]) => setHogwartsPhotos(photos))
+      .catch(() => setHogwartsPhotos([]))
+  }, [])
+
+  const isSuperActive = activeReward?.words === superWords
+
   return (
     <div className="app-screen flex flex-col max-w-lg mx-auto">
       {activeReward && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-6 animate-bounce-in">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-4 sm:px-6 animate-bounce-in">
           <div
-            className={`rounded-3xl p-5 sm:p-6 shadow-2xl max-w-md w-full ${
-              activeReward.words === superWords
+            className={`rounded-3xl p-4 sm:p-6 shadow-2xl max-w-md w-full max-h-[90svh] overflow-y-auto overscroll-contain ${
+              isSuperActive
                 ? 'bg-gradient-to-r from-yellow-100 via-amber-200 to-yellow-100 border-2 border-amber-400 animate-pulse-glow'
                 : 'bg-white border-2 border-white/40'
             }`}
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex gap-4 items-center">
-                <span className="text-4xl">{activeReward.words === superWords ? '👑' : ''}{activeReward.emoji}</span>
+                <span className="text-4xl">{isSuperActive ? '👑' : ''}{activeReward.emoji}</span>
                 <div>
                   <h3
                     className={`text-xl sm:text-2xl font-extrabold ${
-                      activeReward.words === superWords ? 'text-amber-900' : 'text-amber-700'
+                      isSuperActive ? 'text-amber-900' : 'text-amber-700'
                     }`}
                   >
                     {activeReward.title}
@@ -55,6 +68,10 @@ export function Rewards({ rewards, learnedCount, onBack }: Props) {
                 {activeReward.details ?? activeReward.description}
               </p>
 
+              {isSuperActive && hogwartsPhotos.length > 0 && (
+                <PhotoSlider photos={hogwartsPhotos} baseUrl={BASE} />
+              )}
+
               <div className="mt-4">
                 {learnedCount >= activeReward.words ? (
                   <p className="text-emerald-700 font-extrabold">✅ Готово! Подарок твой!</p>
@@ -65,10 +82,20 @@ export function Rewards({ rewards, learnedCount, onBack }: Props) {
                 )}
               </div>
 
-              {activeReward.words === superWords && (
-                <p className="mt-3 text-xs text-amber-900/80 font-semibold">
-                  В Хогвартсе нужно говорить по-английски. Поэтому важно выучить ВСЕ 1000 слов.
-                </p>
+              {isSuperActive && (
+                <>
+                  <p className="mt-3 text-xs text-amber-900/80 font-semibold">
+                    В Хогвартсе нужно говорить по-английски. Поэтому важно выучить ВСЕ 1000 слов.
+                  </p>
+                  <a
+                    href="https://www.universalbeijingresort.com/en/themelands/harrypotter"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-extrabold text-[#5b4db0] underline underline-offset-2 decoration-[#5b4db0]/40 hover:decoration-[#5b4db0] active:scale-[0.98] transition-transform"
+                  >
+                    Официальный сайт Universal Beijing →
+                  </a>
+                </>
               )}
             </div>
 
@@ -84,13 +111,11 @@ export function Rewards({ rewards, learnedCount, onBack }: Props) {
         </div>
       )}
 
-      {/* Header */}
       <div className="flex-shrink-0 app-screen-x pt-3 sm:pt-4 pb-1 sm:pb-2 text-center">
         <h2 className="text-xl sm:text-3xl font-extrabold text-amber-600">🎁 Мои подарки</h2>
         <p className="text-gray-500 text-sm">Учи слова и зарабатывай подарки!</p>
       </div>
 
-      {/* Rewards list scrollable */}
       <div className="flex-1 overflow-y-auto app-screen-x min-h-0 overscroll-contain">
         <div className="flex flex-col gap-3 py-2">
           {rewards.map(r => {
@@ -156,7 +181,6 @@ export function Rewards({ rewards, learnedCount, onBack }: Props) {
         </div>
       </div>
 
-      {/* Button pinned to bottom */}
       <div className="flex-shrink-0 app-screen-x app-screen-bottom pt-2 sm:pt-3">
         <button
           onClick={onBack}

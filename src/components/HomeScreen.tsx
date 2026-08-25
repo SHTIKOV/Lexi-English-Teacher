@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import type { Screen, AppConfig, Reward } from '../types'
-import { ProgressBar } from './ProgressBar'
 import { motivations } from '../data/levels'
 import lexiHello from '../assets/lexi-hello.png'
 
@@ -17,91 +16,120 @@ export function HomeScreen({ config, learnedCount, rewards, onNavigate }: Props)
     []
   )
   const nextReward = rewards.find(r => learnedCount < r.words)
+  const progressPct = nextReward
+    ? Math.min(100, (learnedCount / nextReward.words) * 100)
+    : 100
 
   return (
-    <div className="home-screen app-screen flex flex-col max-w-lg mx-auto">
-      {/* Greeting — fixed at top */}
-      <div className="flex-shrink-0 app-screen-x pt-2 pb-1">
-        <div className="home-bubble w-fit max-w-[90%] bg-white rounded-2xl px-3 py-2 shadow-lg border-2 border-pink-200 relative animate-bounce-in">
-          <p className="text-sm sm:text-lg text-purple-600 font-extrabold leading-snug">
-            Привет, {config.childName}!<br />Меня зовут Лекси
-          </p>
-          <div className="absolute -bottom-2 left-8 w-3.5 h-3.5 bg-white border-b-2 border-r-2 border-pink-200 rotate-45" />
-        </div>
-      </div>
+    <div className="home-screen app-screen flex flex-col max-w-lg mx-auto relative">
+      <div className="home-glow pointer-events-none absolute inset-0" aria-hidden />
 
-      {/* Hero — motivation bubble sits right above the character */}
-      <div className="flex-1 min-h-0 flex flex-col items-center justify-end app-screen-x">
-        <div
-          className="flex-shrink-0 self-end max-w-[78%] mb-1 animate-bounce-in"
-          style={{ animationDelay: '0.3s' }}
-        >
-          <div className="home-bubble bg-white rounded-2xl px-3 py-2 shadow-lg border-2 border-purple-200 relative">
-            <p className="text-xs sm:text-base text-pink-500 font-bold leading-snug">{motivation}</p>
-            <div className="absolute -bottom-2 right-8 w-3.5 h-3.5 bg-white border-b-2 border-r-2 border-purple-200 rotate-45" />
+      {/* Character + speech bubbles near Lexi */}
+      <div className="flex-1 min-h-0 relative z-10 app-screen-x overflow-hidden">
+        <div className="absolute top-[6%] left-0 right-0 z-10 flex flex-col gap-2 sm:gap-2.5 pointer-events-none">
+          <div className="home-greeting self-start max-w-[78%] animate-bounce-in pointer-events-auto">
+            <div className="home-bubble w-fit rounded-[1.25rem] px-3.5 py-2.5 relative">
+              <p className="text-[0.95rem] sm:text-lg text-[#6b4f8a] font-extrabold leading-snug tracking-tight">
+                Привет, {config.childName}!
+              </p>
+              <p className="text-xs sm:text-sm text-[#9a7ab0] font-semibold mt-0.5">
+                Меня зовут Лекси
+              </p>
+              <div className="absolute -bottom-1.5 right-6 w-3 h-3 bg-white/90 border-b border-r border-pink-100/80 rotate-45" />
+            </div>
+          </div>
+
+          <div
+            className="home-motivation self-end max-w-[72%] animate-bounce-in pointer-events-auto"
+            style={{ animationDelay: '0.25s' }}
+          >
+            <div className="home-bubble home-bubble-motivation w-fit ml-auto rounded-[1.25rem] px-3.5 py-2.5 relative">
+              <p className="text-xs sm:text-sm font-bold text-[#c45d8a] leading-snug">
+                {motivation}
+              </p>
+              <div className="absolute -bottom-1.5 left-6 w-3 h-3 bg-white/90 border-b border-l border-violet-100/80 rotate-45" />
+            </div>
           </div>
         </div>
 
-        <img
-          src={lexiHello}
-          alt="Фея Lexi"
-          className="home-lexi w-auto max-w-full object-contain object-bottom drop-shadow-xl animate-float flex-shrink min-h-0"
-        />
+        <div className="absolute inset-x-0 bottom-0 top-[28%] flex items-end justify-center -mb-3">
+          <img
+            src={lexiHello}
+            alt="Фея Lexi"
+            className="home-lexi w-auto max-w-[92%] h-full object-contain object-bottom drop-shadow-xl animate-float"
+          />
+        </div>
       </div>
 
-      {/* Bottom panel — stats + buttons */}
-      <div className="flex-shrink-0 app-screen-x app-screen-bottom flex flex-col gap-1.5 sm:gap-3">
-        <div className="home-stats bg-white/70 backdrop-blur rounded-2xl p-2 sm:p-3 shadow-lg">
-          {nextReward ? (
-            <p className="text-center text-xs sm:text-base text-gray-600 mb-1 sm:mb-2 line-clamp-2">
-              Выучено{' '}
-              <span className="font-extrabold text-purple-600 text-sm sm:text-xl">{learnedCount}</span>
-              {' '}из{' '}
-              <span className="font-bold text-gray-700">{nextReward.words}</span>
-              {' '}слов до подарка «{nextReward.title}»
-            </p>
-          ) : (
-            <p className="text-center text-xs sm:text-base text-gray-600 mb-1 sm:mb-2">
-              Выучено <span className="font-extrabold text-purple-600 text-sm sm:text-xl">{learnedCount}</span> слов
-            </p>
-          )}
-          <ProgressBar learnedCount={learnedCount} rewards={rewards} />
-          {!nextReward && (
-            <p className="text-center text-xs sm:text-sm text-emerald-700 font-semibold mt-1 sm:mt-2">🏆 Ты открыла все подарки!</p>
-          )}
+      {/* Bottom: progress + actions */}
+      <div className="flex-shrink-0 app-screen-x app-screen-bottom relative z-20 flex flex-col gap-2.5 sm:gap-3 pt-1">
+        <div className="home-stats rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div className="min-w-0">
+              <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wide text-[#9a7ab0]">
+                Прогресс
+              </p>
+              <p className="text-sm sm:text-base font-extrabold text-[#5c4a6e] truncate">
+                {nextReward ? (
+                  <>
+                    <span className="text-[#7c5cbf]">{learnedCount}</span>
+                    <span className="text-[#b0a0c0] font-bold"> / {nextReward.words}</span>
+                    <span className="text-[#9a7ab0] font-semibold"> · {nextReward.emoji} {nextReward.title}</span>
+                  </>
+                ) : (
+                  <>Выучено {learnedCount} слов · все подарки открыты</>
+                )}
+              </p>
+            </div>
+            <div className="flex-shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#ffd6e7] to-[#e8d5ff] flex items-center justify-center shadow-inner">
+              <span className="text-sm sm:text-base font-black text-[#7c5cbf]">{learnedCount}</span>
+            </div>
+          </div>
+          <div className="w-full h-2 rounded-full bg-[#f0e8f5] overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#f7a8c8] to-[#b794f6] transition-all duration-700 ease-out"
+              style={{ width: `${Math.max(progressPct, learnedCount > 0 ? 6 : 0)}%` }}
+            />
+          </div>
         </div>
 
-        <div className="home-buttons flex flex-col gap-1.5 sm:gap-3">
+        <div className="home-buttons flex flex-col gap-2 sm:gap-2.5">
           <button
             onClick={() => onNavigate('learn')}
-            className="w-full py-2.5 sm:py-5 rounded-2xl sm:rounded-3xl text-sm sm:text-xl font-extrabold text-white bg-gradient-to-r from-green-400 to-emerald-500 shadow-lg sm:shadow-xl ring-1 ring-white/30 active:scale-95 transition-transform cursor-pointer"
+            className="home-btn home-btn-primary w-full rounded-[1.15rem] text-sm sm:text-base font-extrabold text-white active:scale-[0.98] transition-transform cursor-pointer"
           >
-            📚 Учить слова
+            Учить слова
           </button>
-          <button
-            onClick={() => onNavigate('quiz')}
-            className="w-full py-2.5 sm:py-5 rounded-2xl sm:rounded-3xl text-sm sm:text-xl font-extrabold text-white bg-gradient-to-r from-blue-400 to-cyan-500 shadow-lg sm:shadow-xl ring-1 ring-white/30 active:scale-95 transition-transform cursor-pointer"
-          >
-            ✅ Проверить знания
-          </button>
-          <button
-            onClick={() => onNavigate('play')}
-            className="w-full py-2.5 sm:py-5 rounded-2xl sm:rounded-3xl text-sm sm:text-xl font-extrabold text-white bg-gradient-to-r from-purple-400 to-pink-500 shadow-lg sm:shadow-xl ring-1 ring-white/30 active:scale-95 transition-transform cursor-pointer"
-          >
-            🎮 Играть
-          </button>
-          <button
-            onClick={() => onNavigate('library')}
-            className="w-full py-2 sm:py-4 rounded-2xl sm:rounded-3xl text-sm sm:text-lg font-extrabold text-indigo-700 bg-gradient-to-r from-indigo-100 to-sky-200 shadow-lg sm:shadow-xl ring-1 ring-white/30 active:scale-95 transition-transform cursor-pointer"
-          >
-            📖 Моя библиотека
-          </button>
-          <button
-            onClick={() => onNavigate('rewards')}
-            className="w-full py-2 sm:py-4 rounded-2xl sm:rounded-3xl text-sm sm:text-lg font-extrabold text-amber-800 bg-gradient-to-r from-yellow-100 to-amber-300 shadow-lg sm:shadow-xl ring-1 ring-white/30 active:scale-95 transition-transform animate-pulse-glow cursor-pointer"
-          >
-            🎁 Мои подарки
-          </button>
+
+          <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+            <button
+              onClick={() => onNavigate('quiz')}
+              className="home-btn home-btn-soft w-full rounded-[1.15rem] text-sm sm:text-base font-extrabold text-[#3d6b8a] active:scale-[0.98] transition-transform cursor-pointer"
+            >
+              Проверить
+            </button>
+            <button
+              onClick={() => onNavigate('play')}
+              className="home-btn home-btn-soft home-btn-play w-full rounded-[1.15rem] text-sm sm:text-base font-extrabold text-[#7a4d8c] active:scale-[0.98] transition-transform cursor-pointer"
+            >
+              Играть
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+            <button
+              onClick={() => onNavigate('library')}
+              className="home-btn home-btn-ghost w-full rounded-[1.15rem] text-sm sm:text-base font-extrabold text-[#6b5b7a] active:scale-[0.98] transition-transform cursor-pointer"
+            >
+              Библиотека
+            </button>
+            <button
+              onClick={() => onNavigate('rewards')}
+              className="home-btn home-btn-ghost home-btn-gift w-full rounded-[1.15rem] text-sm sm:text-base font-extrabold text-[#8a6a3d] active:scale-[0.98] transition-transform cursor-pointer"
+            >
+              Подарки
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -4,6 +4,13 @@ export interface Word {
   ru: string
 }
 
+export interface RewardPhoto {
+  src: string
+  caption: string
+  credit?: string
+  license?: string
+}
+
 export interface Reward {
   words: number
   title: string

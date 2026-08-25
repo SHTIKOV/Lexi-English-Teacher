@@ -22,7 +22,7 @@ export function HomeScreen({ config, learnedCount, rewards, onNavigate }: Props)
     <div className="home-screen app-screen flex flex-col max-w-lg mx-auto">
       {/* Greeting — fixed at top */}
       <div className="flex-shrink-0 app-screen-x pt-2 pb-1">
-        <div className="home-bubble bg-white rounded-2xl px-3 py-2 shadow-lg border-2 border-pink-200 relative max-w-[90%] animate-bounce-in">
+        <div className="home-bubble w-fit max-w-[90%] bg-white rounded-2xl px-3 py-2 shadow-lg border-2 border-pink-200 relative animate-bounce-in">
           <p className="text-sm sm:text-lg text-purple-600 font-extrabold leading-snug">
             Привет, {config.childName}!<br />Меня зовут Лекси
           </p>

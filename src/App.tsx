@@ -56,7 +56,8 @@ export default function App() {
       )}
       {screen === 'library' && (
         <Library
-          blocks={learnedBlocks}
+          learnedBlocks={learnedBlocks}
+          upcomingBlocks={wordBlocks}
           onBack={() => setScreen('home')}
         />
       )}

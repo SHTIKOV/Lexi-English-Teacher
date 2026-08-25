@@ -228,5 +228,50 @@
         "ru": "десять"
       }
     ]
+  },
+  {
+    "title": "Цвета",
+    "words": [
+      {
+        "en": "red",
+        "transcription": "рэд",
+        "ru": "красный"
+      },
+      {
+        "en": "blue",
+        "transcription": "блу",
+        "ru": "синий"
+      },
+      {
+        "en": "green",
+        "transcription": "грин",
+        "ru": "зелёный"
+      },
+      {
+        "en": "yellow",
+        "transcription": "йелоу",
+        "ru": "жёлтый"
+      },
+      {
+        "en": "white",
+        "transcription": "вайт",
+        "ru": "белый"
+      },
+      {
+        "en": "black",
+        "transcription": "блэк",
+        "ru": "чёрный"
+      },
+      {
+        "en": "pink",
+        "transcription": "пинк",
+        "ru": "розовый"
+      },
+      {
+        "en": "orange",
+        "transcription": "ориндж",
+        "ru": "оранжевый"
+      }
+    ]
   }
 ]

@@ -273,5 +273,60 @@
         "ru": "оранжевый"
       }
     ]
+  },
+  {
+    "title": "Животные",
+    "words": [
+      {
+        "en": "cat",
+        "transcription": "кэт",
+        "ru": "кошка"
+      },
+      {
+        "en": "dog",
+        "transcription": "дог",
+        "ru": "собака"
+      },
+      {
+        "en": "bird",
+        "transcription": "бёрд",
+        "ru": "птица"
+      },
+      {
+        "en": "fish",
+        "transcription": "фиш",
+        "ru": "рыба"
+      },
+      {
+        "en": "horse",
+        "transcription": "хорс",
+        "ru": "лошадь"
+      },
+      {
+        "en": "cow",
+        "transcription": "кау",
+        "ru": "корова"
+      },
+      {
+        "en": "pig",
+        "transcription": "пиг",
+        "ru": "свинья"
+      },
+      {
+        "en": "rabbit",
+        "transcription": "рэббит",
+        "ru": "кролик"
+      },
+      {
+        "en": "mouse",
+        "transcription": "маус",
+        "ru": "мышь"
+      },
+      {
+        "en": "bear",
+        "transcription": "бэр",
+        "ru": "медведь"
+      }
+    ]
   }
 ]

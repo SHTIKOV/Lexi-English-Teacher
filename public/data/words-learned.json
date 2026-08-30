@@ -328,5 +328,60 @@
         "ru": "медведь"
       }
     ]
+  },
+  {
+    "title": "Еда",
+    "words": [
+      {
+        "en": "water",
+        "transcription": "вотер",
+        "ru": "вода"
+      },
+      {
+        "en": "food",
+        "transcription": "фуд",
+        "ru": "еда"
+      },
+      {
+        "en": "bread",
+        "transcription": "брэд",
+        "ru": "хлеб"
+      },
+      {
+        "en": "milk",
+        "transcription": "милк",
+        "ru": "молоко"
+      },
+      {
+        "en": "apple",
+        "transcription": "эпл",
+        "ru": "яблоко"
+      },
+      {
+        "en": "egg",
+        "transcription": "эг",
+        "ru": "яйцо"
+      },
+      {
+        "en": "meat",
+        "transcription": "мит",
+        "ru": "мясо"
+      },
+      {
+        "en": "rice",
+        "transcription": "райс",
+        "ru": "рис"
+      },
+      {
+        "en": "sugar",
+        "transcription": "шугар",
+        "ru": "сахар"
+      },
+      {
+        "en": "salt",
+        "transcription": "солт",
+        "ru": "соль"
+      }
+    ]
   }
 ]

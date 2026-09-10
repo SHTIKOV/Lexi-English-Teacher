@@ -1,48 +1,6 @@
 [
   [
     {
-      "en": "juice",
-      "transcription": "джус",
-      "ru": "сок"
-    },
-    {
-      "en": "tea",
-      "transcription": "ти",
-      "ru": "чай"
-    },
-    {
-      "en": "coffee",
-      "transcription": "кофи",
-      "ru": "кофе"
-    },
-    {
-      "en": "cake",
-      "transcription": "кейк",
-      "ru": "торт"
-    },
-    {
-      "en": "cheese",
-      "transcription": "чиз",
-      "ru": "сыр"
-    },
-    {
-      "en": "butter",
-      "transcription": "батер",
-      "ru": "масло"
-    },
-    {
-      "en": "soup",
-      "transcription": "суп",
-      "ru": "суп"
-    },
-    {
-      "en": "chicken",
-      "transcription": "чикен",
-      "ru": "курица"
-    }
-  ],
-  [
-    {
       "en": "banana",
       "transcription": "бэнана",
       "ru": "банан"

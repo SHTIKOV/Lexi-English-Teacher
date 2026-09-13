@@ -428,5 +428,50 @@
         "ru": "курица"
       }
     ]
+  },
+  {
+    "title": "Фрукты и овощи",
+    "words": [
+      {
+        "en": "banana",
+        "transcription": "бэнана",
+        "ru": "банан"
+      },
+      {
+        "en": "tomato",
+        "transcription": "томейто",
+        "ru": "помидор"
+      },
+      {
+        "en": "potato",
+        "transcription": "потейто",
+        "ru": "картошка"
+      },
+      {
+        "en": "carrot",
+        "transcription": "кэррот",
+        "ru": "морковь"
+      },
+      {
+        "en": "lemon",
+        "transcription": "лемон",
+        "ru": "лимон"
+      },
+      {
+        "en": "strawberry",
+        "transcription": "стробэри",
+        "ru": "клубника"
+      },
+      {
+        "en": "grape",
+        "transcription": "грэйп",
+        "ru": "виноград"
+      },
+      {
+        "en": "watermelon",
+        "transcription": "вотермелон",
+        "ru": "арбуз"
+      }
+    ]
   }
 ]

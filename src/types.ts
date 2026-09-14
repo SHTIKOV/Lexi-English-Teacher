@@ -36,4 +36,13 @@ export interface Level {
   emoji: string
 }
 
+export type LessonStage = 'learn' | 'quiz' | 'play' | 'done'
+
+export interface LessonProgress {
+  blockKey: string
+  learned: boolean
+  quizPassed: boolean
+  playPassed: boolean
+}
+
 export type Screen = 'home' | 'learn' | 'quiz' | 'play' | 'rewards' | 'library'

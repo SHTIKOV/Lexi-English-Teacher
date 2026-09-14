@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import type { Screen } from './types'
 import { useWords } from './hooks/useWords'
+import { useProgress } from './hooks/useProgress'
 import { HomeScreen } from './components/HomeScreen'
-import { LearnWords } from './components/LearnWords'
+import { Lesson } from './components/Lesson'
 import { Quiz } from './components/Quiz'
 import { Library } from './components/Library'
 import { Rewards } from './components/Rewards'
@@ -10,6 +11,7 @@ import { Rewards } from './components/Rewards'
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
   const { currentWords, wordBlocks, learnedBlocks, wordsLearned, allWords, totalLearned, config, rewards, loading } = useWords()
+  const { stage, complete, reset } = useProgress(currentWords)
 
   if (loading) {
     return (
@@ -26,14 +28,20 @@ export default function App() {
           config={config}
           learnedCount={totalLearned}
           rewards={rewards}
+          stage={stage}
           onNavigate={setScreen}
         />
       )}
       {screen === 'learn' && (
-        <LearnWords
+        <Lesson
           words={currentWords}
+          learnedBlocks={learnedBlocks}
+          allWords={allWords}
           blockNumber={wordBlocks.length > 0 ? 1 : undefined}
           totalBlocks={wordBlocks.length > 0 ? wordBlocks.length : undefined}
+          stage={stage}
+          onComplete={complete}
+          onRestart={reset}
           onBack={() => setScreen('home')}
         />
       )}

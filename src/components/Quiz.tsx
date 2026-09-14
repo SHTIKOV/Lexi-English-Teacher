@@ -10,10 +10,14 @@ interface Props {
   allWords: Word[]
   title: string
   questionCount?: number
+  /** Доля правильных ответов, нужная для прохождения этапа (0-100). По умолчанию просто похвала. */
+  passThreshold?: number
+  /** Показывается вместо «Ещё раз», когда порог взят: следующий шаг урока. */
+  onContinue?: { label: string; action: () => void }
   onBack: () => void
 }
 
-export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
+export function Quiz({ words, allWords, title, questionCount, passThreshold = 80, onContinue, onBack }: Props) {
   const [showExit, setShowExit] = useState(false)
   const { current, currentIndex, total, score, answered, finished, answer, next, reset } =
     useQuiz(words, allWords, questionCount)
@@ -21,6 +25,9 @@ export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
   useEffect(() => {
     reset()
   }, [words, reset])
+
+  const percent = total > 0 ? Math.round((score / total) * 100) : 0
+  const passed = finished && percent >= passThreshold
 
   if (words.length < 2) {
     return (
@@ -41,8 +48,7 @@ export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
   }
 
   if (finished) {
-    const percent = Math.round((score / total) * 100)
-    const great = percent >= 80
+    const great = passed
     return (
       <div className="app-screen flex flex-col max-w-lg mx-auto">
         <div className="flex-1 flex flex-col items-center justify-center px-4">
@@ -62,12 +68,25 @@ export function Quiz({ words, allWords, title, questionCount, onBack }: Props) {
             <p className="text-lg text-gray-600">
               {great ? 'Ты настоящая звезда! ⭐' : 'Попробуй ещё разок! 🌈'}
             </p>
+            {onContinue && (
+              <p className="text-sm font-semibold text-purple-400 mt-2">
+                {great
+                  ? `Этап пройден — ${percent}% из нужных ${passThreshold}%`
+                  : `Нужно ${passThreshold}%, а пока ${percent}%`}
+              </p>
+            )}
           </div>
         </div>
         <div className="flex-shrink-0 app-screen-x app-screen-bottom pt-2 sm:pt-3 flex flex-col gap-2 sm:gap-3">
-          <button onClick={reset} className="w-full py-4 rounded-2xl text-lg font-bold text-white bg-gradient-to-r from-green-400 to-emerald-500 shadow-lg active:scale-95 transition-transform cursor-pointer">
-            🔄 Ещё раз
-          </button>
+          {onContinue && great ? (
+            <button onClick={onContinue.action} className="w-full py-4 rounded-2xl text-lg font-bold text-white bg-gradient-to-r from-green-400 to-emerald-500 shadow-lg active:scale-95 transition-transform cursor-pointer">
+              {onContinue.label}
+            </button>
+          ) : (
+            <button onClick={reset} className="w-full py-4 rounded-2xl text-lg font-bold text-white bg-gradient-to-r from-green-400 to-emerald-500 shadow-lg active:scale-95 transition-transform cursor-pointer">
+              🔄 Ещё раз
+            </button>
+          )}
           <button onClick={onBack} className="w-full py-3 rounded-2xl text-lg font-bold text-gray-600 bg-white/80 shadow active:scale-95 transition-transform cursor-pointer">
             🏠 Главное меню
           </button>

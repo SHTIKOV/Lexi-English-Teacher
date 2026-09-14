@@ -8,10 +8,12 @@ interface Props {
   words: Word[]
   blockNumber?: number
   totalBlocks?: number
+  /** Ребёнок дошёл до конца блока и подтвердил, что выучил слова — дальше проверка. */
+  onLearned: () => void
   onBack: () => void
 }
 
-export function LearnWords({ words, blockNumber, totalBlocks, onBack }: Props) {
+export function LearnWords({ words, blockNumber, totalBlocks, onLearned, onBack }: Props) {
   const [index, setIndex] = useState(0)
   const [showExit, setShowExit] = useState(false)
 
@@ -62,13 +64,21 @@ export function LearnWords({ words, blockNumber, totalBlocks, onBack }: Props) {
           >
             ← Назад
           </button>
-          <button
-            onClick={() => setIndex(i => Math.min(words.length - 1, i + 1))}
-            disabled={index === words.length - 1}
-            className="flex-1 py-4 rounded-2xl text-lg font-bold text-white bg-gradient-to-r from-blue-400 to-blue-500 shadow-lg active:scale-95 transition-transform disabled:opacity-40 cursor-pointer disabled:cursor-default"
-          >
-            Далее →
-          </button>
+          {index === words.length - 1 ? (
+            <button
+              onClick={onLearned}
+              className="flex-1 py-4 rounded-2xl text-lg font-bold text-white bg-gradient-to-r from-green-400 to-emerald-500 shadow-lg active:scale-95 transition-transform cursor-pointer"
+            >
+              Я выучил! → Проверка
+            </button>
+          ) : (
+            <button
+              onClick={() => setIndex(i => Math.min(words.length - 1, i + 1))}
+              className="flex-1 py-4 rounded-2xl text-lg font-bold text-white bg-gradient-to-r from-blue-400 to-blue-500 shadow-lg active:scale-95 transition-transform cursor-pointer"
+            >
+              Далее →
+            </button>
+          )}
         </div>
         <button onClick={() => setShowExit(true)} className="w-full py-3 rounded-2xl text-lg font-bold text-gray-600 bg-white/80 shadow active:scale-95 transition-transform cursor-pointer">
           🏠 Главное меню

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { Screen, AppConfig, Reward } from '../types'
+import type { Screen, AppConfig, Reward, LessonStage } from '../types'
 import { motivations } from '../data/levels'
 import lexiHello from '../assets/lexi-hello.png'
 
@@ -7,10 +7,20 @@ interface Props {
   config: AppConfig
   learnedCount: number
   rewards: Reward[]
+  stage: LessonStage
   onNavigate: (screen: Screen) => void
 }
 
-export function HomeScreen({ config, learnedCount, rewards, onNavigate }: Props) {
+// Подсказка, на каком шаге урока «Учить слова» остановились.
+const STAGE_HINT: Record<LessonStage, string> = {
+  learn: 'Урок · шаг 1 из 3: учим новые слова',
+  quiz: 'Урок · шаг 2 из 3: проверка, нужно 100%',
+  play: 'Урок · шаг 3 из 3: игра, нужно 90%',
+  done: 'Урок пройден! Слова скоро попадут в библиотеку 🎉',
+}
+
+export function HomeScreen({ config, learnedCount, rewards, stage, onNavigate }: Props) {
+
   const motivation = useMemo(
     () => motivations[Math.floor(Math.random() * motivations.length)],
     []
@@ -85,6 +95,9 @@ export function HomeScreen({ config, learnedCount, rewards, onNavigate }: Props)
               <span className="text-sm sm:text-base font-black text-[#7c5cbf]">{learnedCount}</span>
             </div>
           </div>
+          <p className="text-[11px] sm:text-xs font-bold text-[#9a7ab0] mb-1.5">
+            {STAGE_HINT[stage]}
+          </p>
           <div className="w-full h-2 rounded-full bg-[#f0e8f5] overflow-hidden">
             <div
               className="h-full rounded-full bg-gradient-to-r from-[#f7a8c8] to-[#b794f6] transition-all duration-700 ease-out"
@@ -98,7 +111,7 @@ export function HomeScreen({ config, learnedCount, rewards, onNavigate }: Props)
             onClick={() => onNavigate('learn')}
             className="home-btn home-btn-primary w-full rounded-[1.15rem] text-sm sm:text-base font-extrabold text-white active:scale-[0.98] transition-transform cursor-pointer"
           >
-            Учить слова
+            {stage === 'done' ? 'Урок пройден 🎉' : 'Учить слова'}
           </button>
 
           <div className="grid grid-cols-2 gap-2 sm:gap-2.5">

@@ -7,7 +7,7 @@ COMPOSE_DEV = docker compose -f docker-compose.yml -f docker-compose.dev.yml
 #   make deploy DEPLOY_HOST=shtikoff DEPLOY_PATH=/home/profipark/lexi.shtikoff.ru
 DEPLOY_HOST ?= shtikoff
 DEPLOY_PATH ?= /home/profipark/lexi.shtikoff.ru
-DEPLOY_APP_PORT ?= 3010
+DEPLOY_APP_PORT ?= 3011
 
 help:
 	@echo "Lexi — Docker commands"

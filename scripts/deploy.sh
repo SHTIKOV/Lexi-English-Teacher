@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 HOST="${DEPLOY_HOST:-shtikoff}"
 REMOTE_PATH="${DEPLOY_PATH:-/home/profipark/lexi.shtikoff.ru}"
-REMOTE_PORT="${DEPLOY_APP_PORT:-3010}"
+REMOTE_PORT="${DEPLOY_APP_PORT:-3011}"
 
 cd "$ROOT"
 

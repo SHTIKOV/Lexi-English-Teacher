@@ -86,6 +86,12 @@ export function useMaxAuth() {
         body: { initData },
       })
       await fetchSession()
+      if (!loggedIn.value) {
+        // Cookie may be blocked; header-based auth will cover subsequent API calls.
+        // Re-check once more after a tick.
+        await new Promise((r) => setTimeout(r, 50))
+        await fetchSession()
+      }
       status.value = 'ready'
       return true
     }

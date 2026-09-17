@@ -22,7 +22,8 @@ export default defineNuxtConfig({
       cookie: {
         // false for local HTTP docker; set SESSION_COOKIE_SECURE=1 behind HTTPS
         secure: process.env.SESSION_COOKIE_SECURE === '1',
-        sameSite: 'lax' as const,
+        // Max / Telegram WebViews often need None; Lax breaks session on mini-apps
+        sameSite: (process.env.SESSION_COOKIE_SECURE === '1' ? 'none' : 'lax') as 'none' | 'lax',
       },
     },
     databaseUrl: '',

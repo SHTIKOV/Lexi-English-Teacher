@@ -23,6 +23,7 @@ export default defineEventHandler(async (event) => {
   if (path.startsWith('/api/auth/features')) return
   if (path.startsWith('/api/auth/logout')) return
   if (path.startsWith('/api/cron/')) return
+  if (path.startsWith('/api/max/')) return
 
   try {
     const session = await getUserSession(event)

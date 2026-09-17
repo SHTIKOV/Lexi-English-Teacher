@@ -80,3 +80,11 @@ make deploy
 - На сервере cron (**08:00 MSK**): `/etc/cron.d/lexi-daily-reminders`
 - Ручной запуск: `make remind`
 - `?force=1` — повторно сегодня
+
+## Приветствие бота (картинка + «Играть»)
+
+При `bot_started` и командах вроде `/start` бот шлёт фото Лекси и кнопку **Играть** (`open_app`).
+
+- Webhook: `POST /api/max/webhook`
+- Подписка: `make webhook` (или автоматически в конце `make deploy`)
+- Нужны env: `NUXT_PUBLIC_APP_URL`, `MAX_WEBHOOK_SECRET`, `NUXT_PUBLIC_MAX_BOT_USERNAME`

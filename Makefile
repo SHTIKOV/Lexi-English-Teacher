@@ -1,4 +1,4 @@
-.PHONY: help up down rebuild logs shell db-shell seed migrate status dev stop clean remind deploy
+.PHONY: help up down rebuild logs shell db-shell seed migrate status dev stop clean remind webhook deploy
 
 COMPOSE = docker compose
 COMPOSE_DEV = docker compose -f docker-compose.yml -f docker-compose.dev.yml
@@ -24,6 +24,7 @@ help:
 	@echo "  make seed      Re-seed word blocks (wipes catalog)"
 	@echo "  make migrate   Push Drizzle schema"
 	@echo "  make remind    Send daily Max reminders now (force)"
+	@echo "  make webhook   Register Max bot webhook subscription"
 	@echo "  make deploy    Rsync + rebuild on $(DEPLOY_HOST)"
 	@echo "  make clean     Down + remove volumes (DATA LOSS)"
 
@@ -64,6 +65,11 @@ migrate:
 remind:
 	@set -a; . ./.env; set +a; \
 	curl -fsS -X POST "http://127.0.0.1:$${APP_PORT:-3000}/api/cron/daily-reminders?force=1" \
+	  -H "Authorization: Bearer $${CRON_SECRET}"
+
+webhook:
+	@set -a; . ./.env; set +a; \
+	curl -fsS -X POST "http://127.0.0.1:$${APP_PORT:-3000}/api/max/subscribe-webhook" \
 	  -H "Authorization: Bearer $${CRON_SECRET}"
 
 deploy:

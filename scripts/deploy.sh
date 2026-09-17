@@ -44,3 +44,13 @@ echo "==> Status"
 ssh -o BatchMode=yes "${HOST}" "cd '${REMOTE_PATH}' && docker compose ps && curl -sI http://127.0.0.1:${REMOTE_PORT}/ | head -5"
 
 echo "==> Deploy OK → ${HOST} (port ${REMOTE_PORT})"
+
+# Register Max webhook if secrets are present on the server
+ssh -o BatchMode=yes "${HOST}" "cd '${REMOTE_PATH}' && \
+  set -a && . ./.env && set +a && \
+  if [ -n \"\${CRON_SECRET:-}\" ] && [ -n \"\${MAX_WEBHOOK_SECRET:-}\" ] && [ -n \"\${NUXT_PUBLIC_APP_URL:-}\" ]; then \
+    curl -fsS -X POST \"http://127.0.0.1:${REMOTE_PORT}/api/max/subscribe-webhook\" \
+      -H \"Authorization: Bearer \${CRON_SECRET}\" && echo && echo '==> Max webhook subscribed'; \
+  else \
+    echo '==> Skip webhook subscribe (missing CRON_SECRET / MAX_WEBHOOK_SECRET / NUXT_PUBLIC_APP_URL)'; \
+  fi"

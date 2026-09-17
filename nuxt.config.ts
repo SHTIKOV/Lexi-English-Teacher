@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     databaseUrl: '',
     maxBotToken: '',
     cronSecret: '',
+    maxWebhookSecret: '',
     maxDevBypass: '0',
     maxTestAuth: '1',
     public: {
@@ -38,6 +39,7 @@ export default defineNuxtConfig({
       maxDevBypass: '0',
       maxTestAuth: '1',
       maxBotUsername: '',
+      appUrl: '',
     },
   },
   app: {

@@ -43,6 +43,7 @@ export interface SessionUser {
   displayName: string
   avatarUrl: string | null
   childName: string
+  onboardingCompleted: boolean
 }
 
 export interface MaxInitUser {

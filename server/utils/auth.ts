@@ -28,5 +28,6 @@ export function toSessionUser(row: typeof users.$inferSelect): SessionUser {
     displayName: row.displayName,
     avatarUrl: row.avatarUrl,
     childName: row.childName,
+    onboardingCompleted: Boolean(row.onboardingCompletedAt),
   }
 }

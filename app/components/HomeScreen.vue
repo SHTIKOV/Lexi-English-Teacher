@@ -70,7 +70,7 @@ const progressPct = computed(() => {
       <div class="absolute inset-x-0 bottom-0 top-[28%] flex items-end justify-center -mb-3">
         <img
           :src="lexiHello"
-          alt="Фея Lexi"
+          alt="Лекси — английский друг"
           class="home-lexi w-auto max-w-[92%] h-full object-contain object-bottom drop-shadow-xl animate-float"
         >
       </div>

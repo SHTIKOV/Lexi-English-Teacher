@@ -81,14 +81,15 @@ export function useMaxAuth() {
     try {
       window.WebApp?.ready?.()
       window.WebApp?.expand?.()
-      await $fetch('/api/auth/max', {
+      const res = await $fetch<{ user: import('#shared/types').SessionUser }>('/api/auth/max', {
         method: 'POST',
         body: { initData },
+        headers: maxAuthHeaders(),
       })
       await fetchSession()
+      const { setProfile } = useProfile()
+      setProfile(res.user ?? null)
       if (!loggedIn.value) {
-        // Cookie may be blocked; header-based auth will cover subsequent API calls.
-        // Re-check once more after a tick.
         await new Promise((r) => setTimeout(r, 50))
         await fetchSession()
       }

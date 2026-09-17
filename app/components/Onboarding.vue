@@ -5,14 +5,15 @@ import lexiBook from '~/assets/lexi-book.png'
 
 const emit = defineEmits<{ done: [] }>()
 
-const { user, fetch: fetchSession } = useUserSession()
+const { fetch: fetchSession } = useUserSession()
+const { profile, refreshProfile } = useProfile()
 const { loadDefaults } = useRewards()
 
 const step = ref(0)
 const busy = ref(false)
 const errorMsg = ref('')
-const childName = ref(user.value?.childName && user.value.childName !== 'Малышка'
-  ? user.value.childName
+const childName = ref(profile.value?.childName && profile.value.childName !== 'Малышка'
+  ? profile.value.childName
   : '')
 const defaultsLoaded = ref(false)
 
@@ -82,6 +83,7 @@ async function saveName() {
     headers: maxAuthHeaders(),
   })
   await fetchSession()
+  await refreshProfile()
   return true
 }
 
@@ -109,6 +111,7 @@ async function next() {
     if (isLast.value) {
       await $fetch('/api/onboarding/complete', { method: 'POST', headers: maxAuthHeaders() })
       await fetchSession()
+      await refreshProfile()
       emit('done')
       return
     }

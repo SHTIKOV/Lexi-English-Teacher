@@ -1,7 +1,8 @@
 <script setup lang="ts">
-const { user, clear, fetch: fetchSession } = useUserSession()
+const { clear } = useUserSession()
+const { profile, refreshProfile, setProfile } = useProfile()
 const { catalog, pending, refresh, rewards } = useCatalog()
-const { ensureAuth, isInsideMax, loadFeatures } = useMaxAuth()
+const { ensureAuth, isInsideMax, loadFeatures, loginFromMax } = useMaxAuth()
 
 const ready = ref(false)
 const bootError = ref('')
@@ -10,9 +11,13 @@ onMounted(async () => {
   try {
     await loadFeatures()
     if (isInsideMax()) {
-      await ensureAuth()
-      await fetchSession()
+      const ok = await loginFromMax()
+      if (!ok) {
+        // still try profile via initData header
+      }
     }
+    await ensureAuth()
+    await refreshProfile()
     await refresh()
     ready.value = true
   }
@@ -22,10 +27,14 @@ onMounted(async () => {
   }
 })
 
-const showOnboarding = computed(() => Boolean(user.value) && !user.value?.onboardingCompleted)
+const showOnboarding = computed(() => {
+  const u = profile.value
+  return Boolean(u) && !u.onboardingCompleted
+})
 
 async function logout() {
   await $fetch('/api/auth/logout', { method: 'POST', headers: maxAuthHeaders() })
+  setProfile(null)
   await clear()
   await navigateTo('/login')
 }
@@ -35,7 +44,7 @@ function go(path: string) {
 }
 
 async function onOnboardingDone() {
-  await fetchSession()
+  await refreshProfile()
   await refresh()
 }
 </script>
@@ -60,7 +69,7 @@ async function onOnboardingDone() {
     />
     <HomeScreen
       v-else
-      :child-name="user?.childName || 'Малышка'"
+      :child-name="profile?.childName || 'Малышка'"
       :learned-count="catalog?.learnedCount ?? 0"
       :stage="catalog?.stage ?? 'learn'"
       :rewards="rewards"

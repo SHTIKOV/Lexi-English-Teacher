@@ -27,6 +27,7 @@ export default defineNuxtConfig({
     },
     databaseUrl: '',
     maxBotToken: '',
+    cronSecret: '',
     maxDevBypass: '0',
     maxTestAuth: '1',
     public: {

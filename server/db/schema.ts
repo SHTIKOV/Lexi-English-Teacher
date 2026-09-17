@@ -16,6 +16,7 @@ export const users = pgTable('users', {
   displayName: text('display_name').notNull(),
   avatarUrl: text('avatar_url'),
   childName: text('child_name').notNull().default('Малышка'),
+  lastReminderAt: timestamp('last_reminder_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 

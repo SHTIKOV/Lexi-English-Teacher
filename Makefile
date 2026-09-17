@@ -1,4 +1,4 @@
-.PHONY: help up down rebuild logs shell db-shell seed migrate status dev stop clean
+.PHONY: help up down rebuild logs shell db-shell seed migrate status dev stop clean remind
 
 COMPOSE = docker compose
 COMPOSE_DEV = docker compose -f docker-compose.yml -f docker-compose.dev.yml
@@ -17,6 +17,7 @@ help:
 	@echo "  make db-shell  psql into Postgres"
 	@echo "  make seed      Re-seed word blocks (wipes catalog)"
 	@echo "  make migrate   Push Drizzle schema"
+	@echo "  make remind    Send daily Max reminders now (force)"
 	@echo "  make clean     Down + remove volumes (DATA LOSS)"
 
 up:
@@ -52,6 +53,11 @@ seed:
 
 migrate:
 	$(COMPOSE) exec app npx drizzle-kit push --force
+
+remind:
+	@set -a; . ./.env; set +a; \
+	curl -fsS -X POST "http://127.0.0.1:$${APP_PORT:-3000}/api/cron/daily-reminders?force=1" \
+	  -H "Authorization: Bearer $${CRON_SECRET}"
 
 clean:
 	$(COMPOSE) down -v

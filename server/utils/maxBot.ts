@@ -1,8 +1,13 @@
+import { readFileSync, existsSync } from 'node:fs'
+import { resolve } from 'node:path'
+
 const MAX_API = 'https://platform-api2.max.ru'
 
 export type MaxSendResult =
   | { ok: true; messageId?: string }
   | { ok: false; status: number; error: string }
+
+let cachedWelcomeImageToken: string | null = process.env.MAX_WELCOME_IMAGE_TOKEN?.trim() || null
 
 function botToken(): string {
   const config = useRuntimeConfig()
@@ -17,11 +22,66 @@ function botUsername(): string {
   return String(useRuntimeConfig().public.maxBotUsername || '').trim().replace(/^@/, '')
 }
 
-function appPublicUrl(): string {
-  const config = useRuntimeConfig()
-  return String(process.env.NUXT_PUBLIC_APP_URL || config.public.appUrl || '')
-    .trim()
-    .replace(/\/$/, '')
+function welcomeImagePath(): string | null {
+  const candidates = [
+    resolve(process.cwd(), '.output/public/lexi-welcome.jpg'),
+    resolve(process.cwd(), 'public/lexi-welcome.jpg'),
+    resolve(process.cwd(), 'app/assets/lexi-hello.png'),
+  ]
+  return candidates.find((p) => existsSync(p)) || null
+}
+
+/** Upload Lexi welcome image to Max and cache attachment token. */
+export async function ensureWelcomeImageToken(): Promise<string | null> {
+  if (cachedWelcomeImageToken) return cachedWelcomeImageToken
+
+  const token = botToken()
+  const path = welcomeImagePath()
+  if (!token || !path) return null
+
+  try {
+    const metaRes = await fetch(`${MAX_API}/uploads?type=image`, {
+      method: 'POST',
+      headers: { Authorization: token },
+    })
+    const meta = await metaRes.json() as { url?: string }
+    if (!meta.url) return null
+
+    const buf = readFileSync(path)
+    const form = new FormData()
+    const mime = path.endsWith('.png') ? 'image/png' : 'image/jpeg'
+    const name = path.endsWith('.png') ? 'lexi-welcome.png' : 'lexi-welcome.jpg'
+    form.append('data', new Blob([buf], { type: mime }), name)
+
+    const upRes = await fetch(meta.url, { method: 'POST', body: form })
+    const upText = await upRes.text()
+    const up = JSON.parse(upText) as {
+      token?: string
+      photos?: Record<string, { token?: string } | Array<{ token?: string }>>
+    }
+
+    let imgToken = up.token || null
+    if (!imgToken && up.photos) {
+      const first = Object.values(up.photos)[0]
+      if (Array.isArray(first)) imgToken = first[0]?.token || null
+      else imgToken = first?.token || null
+    }
+    if (!imgToken) {
+      const m = upText.match(/"token"\s*:\s*"([^"]+)"/)
+      imgToken = m?.[1] || null
+    }
+
+    if (imgToken) {
+      cachedWelcomeImageToken = imgToken
+      // give Max a moment to process on first upload
+      await new Promise((r) => setTimeout(r, 1500))
+    }
+    return imgToken
+  }
+  catch (err) {
+    console.error('[maxBot] welcome image upload failed', err)
+    return null
+  }
 }
 
 export async function sendMaxMessageToUser(
@@ -30,6 +90,7 @@ export async function sendMaxMessageToUser(
   options?: {
     openAppText?: string
     botUsername?: string
+    imageToken?: string
     imageUrl?: string
   },
 ): Promise<MaxSendResult> {
@@ -40,7 +101,13 @@ export async function sendMaxMessageToUser(
 
   const attachments: unknown[] = []
 
-  if (options?.imageUrl) {
+  if (options?.imageToken) {
+    attachments.push({
+      type: 'image',
+      payload: { token: options.imageToken },
+    })
+  }
+  else if (options?.imageUrl) {
     attachments.push({
       type: 'image',
       payload: { url: options.imageUrl },
@@ -103,12 +170,6 @@ export async function sendMaxMessageToUser(
   }
 }
 
-export function welcomeLexiImageUrl(): string | undefined {
-  const base = appPublicUrl()
-  if (!base) return undefined
-  return `${base}/lexi-welcome.jpg`
-}
-
 export async function sendWelcomeMessage(
   userId: string | number,
   displayName?: string,
@@ -123,9 +184,11 @@ export async function sendWelcomeMessage(
     'Нажми «Играть», чтобы начать ✨',
   ].join('\n')
 
+  const imageToken = await ensureWelcomeImageToken()
+
   return sendMaxMessageToUser(userId, text, {
     openAppText: 'Играть',
-    imageUrl: welcomeLexiImageUrl(),
+    imageToken: imageToken || undefined,
   })
 }
 

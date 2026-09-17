@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lexi
+      POSTGRES_PASSWORD: lexi
+      POSTGRES_DB: lexi
+    volumes:
+      - lexi_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U lexi -d lexi']
+      interval: 3s
+      timeout: 5s
+      retries: 20
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '${APP_PORT:-3000}:3000'
+    environment:
+      DATABASE_URL: postgresql://lexi:lexi@db:5432/lexi
+      NUXT_SESSION_PASSWORD: ${NUXT_SESSION_PASSWORD:?Set NUXT_SESSION_PASSWORD in .env}
+      MAX_BOT_TOKEN: ${MAX_BOT_TOKEN:-}
+      NUXT_MAX_BOT_TOKEN: ${MAX_BOT_TOKEN:-${NUXT_MAX_BOT_TOKEN:-}}
+      NUXT_PUBLIC_MAX_BOT_USERNAME: ${NUXT_PUBLIC_MAX_BOT_USERNAME:-}
+      MAX_DEV_BYPASS: ${MAX_DEV_BYPASS:-0}
+      NUXT_MAX_DEV_BYPASS: ${MAX_DEV_BYPASS:-0}
+      NUXT_PUBLIC_MAX_DEV_BYPASS: ${MAX_DEV_BYPASS:-0}
+      MAX_TEST_AUTH: ${MAX_TEST_AUTH:-${MAX_DEV_BYPASS:-0}}
+      NUXT_MAX_TEST_AUTH: ${MAX_TEST_AUTH:-${MAX_DEV_BYPASS:-0}}
+      NUXT_PUBLIC_MAX_TEST_AUTH: ${MAX_TEST_AUTH:-${MAX_DEV_BYPASS:-0}}
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-0}
+      HOST: 0.0.0.0
+      PORT: 3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  lexi_pg_data:

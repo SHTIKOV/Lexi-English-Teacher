@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - lexi_node_modules:/app/node_modules
+    environment:
+      NODE_ENV: development
+
+volumes:
+  lexi_node_modules:

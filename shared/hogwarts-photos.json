@@ -1,0 +1,50 @@
+[
+  {
+    "src": "images/hogwarts/hogwarts-distant.jpg",
+    "caption": "Замок Хогвартс — вид издалека",
+    "credit": "N509FZ",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "src": "images/hogwarts/hogwarts-close.jpg",
+    "caption": "Замок Хогвартс вблизи",
+    "credit": "N509FZ",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "src": "images/hogwarts/hogwarts-entrance.jpg",
+    "caption": "Вход к замку Хогвартс",
+    "credit": "Windmemories",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "src": "images/hogwarts/hogsmeade-street.jpg",
+    "caption": "Улица Хогсмид у лавки Олливандера",
+    "credit": "N509FZ",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "src": "images/hogwarts/ollivanders.jpg",
+    "caption": "Лавка Олливандера",
+    "credit": "N509FZ",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "src": "images/hogwarts/ollivanders-entrance.jpg",
+    "caption": "Вход в лавку Олливандера",
+    "credit": "N509FZ",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "src": "images/hogwarts/ollivanders-sign.jpg",
+    "caption": "Вывеска Ollivanders",
+    "credit": "N509FZ",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "src": "images/hogwarts/hogwarts-night.jpg",
+    "caption": "Хогвартс ночью",
+    "credit": "KylieYau",
+    "license": "CC BY-SA 4.0"
+  }
+]

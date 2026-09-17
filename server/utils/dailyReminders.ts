@@ -1,9 +1,9 @@
 import { asc, eq } from 'drizzle-orm'
-import { rewards } from '#shared/rewards'
 import { useDb } from '../db/client'
 import { userBlockProgress, users, wordBlocks } from '../db/schema'
 import { isBlockCompleted } from './catalog'
 import { isRealMaxUserId, sendMaxMessageToUser } from './maxBot'
+import { listUserRewards, nextRewardFromList } from './rewards'
 
 type ReminderContext = {
   childName: string
@@ -50,8 +50,8 @@ export function pickReminderText(ctx: ReminderContext): string {
   return tpl(ctx)
 }
 
-export function nextRewardForCount(learnedCount: number) {
-  return rewards.find((r) => learnedCount < r.words) ?? null
+export function nextRewardForCount(learnedCount: number, rewardsList: { words: number; title: string; emoji: string }[]) {
+  return nextRewardFromList(rewardsList, learnedCount)
 }
 
 async function learnedCountForUser(userId: number): Promise<number> {
@@ -103,7 +103,8 @@ export async function sendDailyReminders(options?: {
     }
 
     const learnedCount = await learnedCountForUser(user.id)
-    const next = nextRewardForCount(learnedCount)
+    const userGiftList = await listUserRewards(user.id)
+    const next = nextRewardForCount(learnedCount, userGiftList)
     const wordsLeft = next ? next.words - learnedCount : null
     const text = pickReminderText({
       childName: user.childName || 'друг',

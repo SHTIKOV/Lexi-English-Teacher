@@ -1,5 +1,4 @@
-import type { LessonStage, ProgressStage, Word } from '#shared/types'
-import { rewards } from '#shared/rewards'
+import type { LessonStage, ProgressStage, Reward, Word } from '#shared/types'
 
 export interface CurrentCatalog {
   currentBlock: {
@@ -21,11 +20,16 @@ export interface CurrentCatalog {
 export function useCatalog() {
   const catalog = useState<CurrentCatalog | null>('catalog', () => null)
   const pending = useState('catalog-pending', () => false)
+  const { rewards, refresh: refreshRewards } = useRewards()
 
   async function refresh() {
     pending.value = true
     try {
-      catalog.value = await $fetch<CurrentCatalog>('/api/catalog/current')
+      const [cat] = await Promise.all([
+        $fetch<CurrentCatalog>('/api/catalog/current'),
+        refreshRewards(),
+      ])
+      catalog.value = cat
     }
     finally {
       pending.value = false
@@ -53,7 +57,7 @@ export function useCatalog() {
 
   const nextReward = computed(() => {
     const count = catalog.value?.learnedCount ?? 0
-    return rewards.find((r) => count < r.words) ?? null
+    return rewards.value.find((r: Reward) => count < r.words) ?? null
   })
 
   return {

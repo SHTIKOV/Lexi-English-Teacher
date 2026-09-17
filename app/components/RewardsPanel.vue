@@ -1,24 +1,146 @@
 <script setup lang="ts">
 import type { Reward, RewardPhoto } from '#shared/types'
-import { rewards } from '#shared/rewards'
 import hogwartsPhotosJson from '#shared/hogwarts-photos.json'
 
-defineProps<{
+const props = defineProps<{
   learnedCount: number
+  rewards: Reward[]
 }>()
 
-const emit = defineEmits<{ back: [] }>()
+const emit = defineEmits<{
+  back: []
+  changed: []
+}>()
+
+const {
+  create,
+  update,
+  remove,
+  loadDefaults,
+} = useRewards()
 
 const activeReward = ref<Reward | null>(null)
+const managing = ref(false)
+const editing = ref<Reward | null>(null)
+const formOpen = ref(false)
+const busy = ref(false)
+const errorMsg = ref('')
+
+const form = reactive({
+  words: 30,
+  title: '',
+  emoji: '🎁',
+  description: '',
+  details: '',
+})
+
 const hogwartsPhotos = hogwartsPhotosJson as RewardPhoto[]
-const superWords = Math.max(...rewards.map((r) => r.words))
-const isSuperActive = computed(() => activeReward.value?.words === superWords)
+const superWords = computed(() =>
+  props.rewards.length ? Math.max(...props.rewards.map((r) => r.words)) : 0,
+)
+const isSuperActive = computed(() =>
+  Boolean(activeReward.value && activeReward.value.words === superWords.value && superWords.value > 0),
+)
+
+function resetForm() {
+  form.words = 30
+  form.title = ''
+  form.emoji = '🎁'
+  form.description = ''
+  form.details = ''
+  editing.value = null
+  errorMsg.value = ''
+}
+
+function openCreate() {
+  resetForm()
+  formOpen.value = true
+}
+
+function openEdit(r: Reward) {
+  editing.value = r
+  form.words = r.words
+  form.title = r.title
+  form.emoji = r.emoji
+  form.description = r.description
+  form.details = r.details || ''
+  errorMsg.value = ''
+  formOpen.value = true
+}
+
+async function saveForm() {
+  busy.value = true
+  errorMsg.value = ''
+  try {
+    const payload = {
+      words: Number(form.words),
+      title: form.title.trim(),
+      emoji: form.emoji.trim() || '🎁',
+      description: form.description.trim(),
+      details: form.details.trim() || undefined,
+    }
+    if (editing.value?.id) {
+      await update(editing.value.id, payload)
+    }
+    else {
+      await create(payload)
+    }
+    formOpen.value = false
+    resetForm()
+    emit('changed')
+  }
+  catch (e: unknown) {
+    const err = e as { data?: { statusMessage?: string }; statusMessage?: string; message?: string }
+    errorMsg.value = err?.data?.statusMessage || err?.statusMessage || err?.message || 'Не удалось сохранить'
+  }
+  finally {
+    busy.value = false
+  }
+}
+
+async function deleteReward(r: Reward) {
+  if (!r.id) return
+  if (!confirm(`Удалить подарок «${r.title}»?`)) return
+  busy.value = true
+  try {
+    await remove(r.id)
+    if (activeReward.value?.id === r.id) activeReward.value = null
+    emit('changed')
+  }
+  catch (e: unknown) {
+    const err = e as { data?: { statusMessage?: string }; statusMessage?: string; message?: string }
+    errorMsg.value = err?.data?.statusMessage || err?.statusMessage || err?.message || 'Не удалось удалить'
+  }
+  finally {
+    busy.value = false
+  }
+}
+
+async function onLoadDefaults() {
+  const hasAny = props.rewards.length > 0
+  if (hasAny && !confirm('Заменить текущий список стандартными подарками Lexi?')) {
+    return
+  }
+  busy.value = true
+  errorMsg.value = ''
+  try {
+    await loadDefaults(true)
+    emit('changed')
+  }
+  catch (e: unknown) {
+    const err = e as { data?: { statusMessage?: string }; statusMessage?: string; message?: string }
+    errorMsg.value = err?.data?.statusMessage || err?.statusMessage || err?.message || 'Не удалось загрузить'
+  }
+  finally {
+    busy.value = false
+  }
+}
 </script>
 
 <template>
   <div class="app-screen flex flex-col max-w-lg mx-auto">
     <div
-      v-if="activeReward"
+      v-if="activeReward && !managing"
       class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-4 sm:px-6 animate-bounce-in"
     >
       <div
@@ -68,20 +190,6 @@ const isSuperActive = computed(() => activeReward.value?.words === superWords)
               До подарка осталось еще {{ activeReward.words - learnedCount }} слов ({{ learnedCount }}/{{ activeReward.words }})
             </p>
           </div>
-
-          <template v-if="isSuperActive">
-            <p class="mt-3 text-xs text-amber-900/80 font-semibold">
-              В Хогвартсе нужно говорить по-английски. Поэтому важно выучить ВСЕ 1000 слов.
-            </p>
-            <a
-              href="https://www.universalbeijingresort.com/en/themelands/harrypotter"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="mt-3 inline-flex items-center gap-1.5 text-sm font-extrabold text-[#5b4db0] underline underline-offset-2"
-            >
-              Официальный сайт Universal Beijing →
-            </a>
-          </template>
         </div>
 
         <div class="mt-5 flex gap-3">
@@ -95,24 +203,116 @@ const isSuperActive = computed(() => activeReward.value?.words === superWords)
       </div>
     </div>
 
+    <!-- Edit / create form -->
+    <div
+      v-if="formOpen"
+      class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center px-3 sm:px-6"
+    >
+      <div class="bg-white rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-md max-h-[90svh] overflow-y-auto shadow-2xl">
+        <h3 class="text-xl font-extrabold text-amber-700 mb-3">
+          {{ editing ? 'Изменить подарок' : 'Новый подарок' }}
+        </h3>
+        <div class="flex flex-col gap-3">
+          <label class="text-sm font-bold text-gray-600">
+            Эмодзи
+            <input v-model="form.emoji" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-2xl" maxlength="8">
+          </label>
+          <label class="text-sm font-bold text-gray-600">
+            Название
+            <input v-model="form.title" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 font-semibold" maxlength="80" placeholder="Кинотеатр">
+          </label>
+          <label class="text-sm font-bold text-gray-600">
+            Слов нужно
+            <input v-model.number="form.words" type="number" min="1" max="100000" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 font-semibold">
+          </label>
+          <label class="text-sm font-bold text-gray-600">
+            Коротко
+            <input v-model="form.description" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2" maxlength="200" placeholder="Смотрим мультики!">
+          </label>
+          <label class="text-sm font-bold text-gray-600">
+            Подробности
+            <textarea v-model="form.details" rows="3" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 resize-none" maxlength="2000" placeholder="Что будет, когда откроем подарок…" />
+          </label>
+          <p v-if="errorMsg" class="text-sm text-red-500 font-bold">{{ errorMsg }}</p>
+          <div class="flex gap-2 mt-1">
+            <button
+              class="flex-1 py-3 rounded-2xl font-bold text-gray-600 bg-gray-100 active:scale-95"
+              :disabled="busy"
+              @click="formOpen = false; resetForm()"
+            >
+              Отмена
+            </button>
+            <button
+              class="flex-1 py-3 rounded-2xl font-bold text-white bg-gradient-to-r from-amber-400 to-yellow-500 shadow active:scale-95 disabled:opacity-60"
+              :disabled="busy || !form.title.trim()"
+              @click="saveForm"
+            >
+              Сохранить
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="flex-shrink-0 app-screen-x pt-3 sm:pt-4 pb-1 sm:pb-2 text-center">
       <h2 class="text-xl sm:text-3xl font-extrabold text-amber-600">🎁 Мои подарки</h2>
-      <p class="text-gray-500 text-sm">Учи слова и зарабатывай подарки!</p>
+      <p class="text-gray-500 text-sm">
+        {{ managing ? 'Редактируй список подарков' : 'Учи слова и зарабатывай подарки!' }}
+      </p>
+      <div class="mt-2 flex gap-2 justify-center flex-wrap">
+        <button
+          class="px-3 py-1.5 rounded-full text-xs font-extrabold active:scale-95 transition-transform"
+          :class="managing ? 'bg-amber-500 text-white' : 'bg-white/80 text-amber-700 shadow'"
+          @click="managing = !managing; activeReward = null"
+        >
+          {{ managing ? 'Готово' : 'Управлять' }}
+        </button>
+        <button
+          v-if="managing"
+          class="px-3 py-1.5 rounded-full text-xs font-extrabold bg-emerald-500 text-white active:scale-95"
+          :disabled="busy"
+          @click="openCreate"
+        >
+          + Добавить
+        </button>
+        <button
+          v-if="managing || rewards.length === 0"
+          class="px-3 py-1.5 rounded-full text-xs font-extrabold bg-purple-500 text-white active:scale-95 disabled:opacity-60"
+          :disabled="busy"
+          @click="onLoadDefaults"
+        >
+          Загрузить стандартные
+        </button>
+      </div>
+      <p v-if="errorMsg && !formOpen" class="text-sm text-red-500 font-bold mt-2">{{ errorMsg }}</p>
     </div>
 
     <div class="flex-1 overflow-y-auto app-screen-x min-h-0 overscroll-contain">
-      <div class="flex flex-col gap-3 py-2">
+      <div v-if="rewards.length === 0" class="py-10 text-center">
+        <p class="text-gray-500 font-semibold mb-3">Подарков пока нет</p>
+        <p class="text-sm text-gray-400 mb-4">Загрузи стандартный список Lexi или добавь свои.</p>
+        <button
+          class="px-4 py-3 rounded-2xl font-extrabold text-white bg-gradient-to-r from-purple-400 to-pink-500 shadow active:scale-95"
+          :disabled="busy"
+          @click="onLoadDefaults"
+        >
+          Загрузить стандартные
+        </button>
+      </div>
+
+      <div v-else class="flex flex-col gap-3 py-2">
         <div
           v-for="r in rewards"
-          :key="r.words"
-          class="rounded-3xl p-4 shadow-lg transition-all cursor-pointer relative overflow-hidden"
+          :key="r.id ?? r.words"
+          class="rounded-3xl p-4 shadow-lg transition-all relative overflow-hidden"
           :class="{
+            'cursor-pointer': !managing,
             'bg-gradient-to-r from-yellow-100 via-amber-200 to-yellow-100 border-2 border-amber-400 animate-pulse-glow': r.words === superWords && learnedCount >= r.words,
             'bg-gradient-to-r from-yellow-50 via-amber-100 to-yellow-50 border-2 border-amber-300': r.words === superWords && learnedCount < r.words,
             'bg-gradient-to-r from-yellow-100 to-amber-100 border-2 border-amber-300': r.words !== superWords && learnedCount >= r.words,
             'bg-white/60 border-2 border-gray-200': r.words !== superWords && learnedCount < r.words,
           }"
-          @click="activeReward = r"
+          @click="!managing && (activeReward = r)"
         >
           <div v-if="r.words === superWords" class="absolute inset-0 pointer-events-none">
             <div class="absolute -left-1/3 top-0 h-full w-2/3 bg-gradient-to-r from-transparent via-yellow-200 to-transparent opacity-70 animate-coin-shimmer" />
@@ -141,9 +341,26 @@ const isSuperActive = computed(() => activeReward.value?.words === superWords)
                 <p class="text-xs text-gray-400 mt-1">{{ learnedCount }}/{{ r.words }} слов</p>
               </div>
             </div>
-            <span v-if="learnedCount >= r.words" class="text-2xl animate-float">
+            <span v-if="!managing && learnedCount >= r.words" class="text-2xl animate-float">
               {{ r.words === superWords ? '⭐' : '🎉' }}
             </span>
+          </div>
+
+          <div v-if="managing" class="mt-3 flex gap-2" @click.stop>
+            <button
+              class="flex-1 py-2 rounded-xl text-sm font-extrabold text-amber-800 bg-amber-100 active:scale-95"
+              :disabled="busy"
+              @click="openEdit(r)"
+            >
+              Изменить
+            </button>
+            <button
+              class="flex-1 py-2 rounded-xl text-sm font-extrabold text-red-700 bg-red-100 active:scale-95"
+              :disabled="busy"
+              @click="deleteReward(r)"
+            >
+              Удалить
+            </button>
           </div>
         </div>
       </div>

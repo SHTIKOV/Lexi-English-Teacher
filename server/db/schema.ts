@@ -47,6 +47,25 @@ export const userBlockProgress = pgTable(
   ],
 )
 
+export const userRewards = pgTable(
+  'user_rewards',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    words: integer('words').notNull(),
+    title: text('title').notNull(),
+    emoji: text('emoji').notNull().default('🎁'),
+    description: text('description').notNull().default(''),
+    details: text('details'),
+  },
+  (table) => [
+    uniqueIndex('user_rewards_user_words_uidx').on(table.userId, table.words),
+  ],
+)
+
 export type User = typeof users.$inferSelect
 export type WordBlockRow = typeof wordBlocks.$inferSelect
 export type UserBlockProgress = typeof userBlockProgress.$inferSelect
+export type UserReward = typeof userRewards.$inferSelect

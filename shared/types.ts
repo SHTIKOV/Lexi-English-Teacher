@@ -12,6 +12,7 @@ export interface RewardPhoto {
 }
 
 export interface Reward {
+  id?: number
   words: number
   title: string
   emoji: string

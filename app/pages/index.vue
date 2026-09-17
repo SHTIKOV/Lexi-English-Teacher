@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { user, clear } = useUserSession()
-const { catalog, pending, refresh } = useCatalog()
+const { catalog, pending, refresh, rewards } = useCatalog()
 
 await refresh()
 
@@ -24,6 +24,7 @@ function go(path: string) {
     :child-name="user?.childName || 'Малышка'"
     :learned-count="catalog?.learnedCount ?? 0"
     :stage="catalog?.stage ?? 'learn'"
+    :rewards="rewards"
     @navigate="go"
     @logout="logout"
   />

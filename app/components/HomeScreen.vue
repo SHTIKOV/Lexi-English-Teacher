@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { LessonStage } from '#shared/types'
+import type { LessonStage, Reward } from '#shared/types'
 import { motivations } from '#shared/levels'
-import { rewards } from '#shared/rewards'
 import lexiHello from '~/assets/lexi-hello.png'
 
 const props = defineProps<{
   childName: string
   learnedCount: number
   stage: LessonStage
+  rewards: Reward[]
 }>()
 
 const emit = defineEmits<{
@@ -29,7 +29,7 @@ const STAGE_HINT: Record<LessonStage, string> = {
 }
 
 const motivation = motivations[Math.floor(Math.random() * motivations.length)]!
-const nextReward = computed(() => rewards.find((r) => props.learnedCount < r.words) ?? null)
+const nextReward = computed(() => props.rewards.find((r) => props.learnedCount < r.words) ?? null)
 const progressPct = computed(() => {
   if (!nextReward.value) return 100
   return Math.min(100, (props.learnedCount / nextReward.value.words) * 100)
@@ -88,6 +88,9 @@ const progressPct = computed(() => {
                 <span class="text-[#7c5cbf]">{{ learnedCount }}</span>
                 <span class="text-[#b0a0c0] font-bold"> / {{ nextReward.words }}</span>
                 <span class="text-[#9a7ab0] font-semibold"> · {{ nextReward.emoji }} {{ nextReward.title }}</span>
+              </template>
+              <template v-else-if="rewards.length === 0">
+                Выучено {{ learnedCount }} слов · добавь подарки в разделе «Подарки»
               </template>
               <template v-else>
                 Выучено {{ learnedCount }} слов · все подарки открыты

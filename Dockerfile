@@ -18,8 +18,6 @@ ENV NODE_ENV=production
 ENV NUXT_TELEMETRY_DISABLED=1
 ENV HOST=0.0.0.0
 ENV PORT=3000
-# Max platform-api2 uses Russian Trusted Root CA (Минцифры)
-ENV NODE_EXTRA_CA_CERTS=/app/certs/russian_trusted_root_ca.crt
 
 COPY package.json package-lock.json ./
 # Need drizzle-kit/tsx (devDeps) for migrate+seed on boot
@@ -33,6 +31,8 @@ COPY drizzle.config.ts ./
 COPY docker/certs/russian_trusted_root_ca.crt /app/certs/russian_trusted_root_ca.crt
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+# Max platform-api2 uses Russian Trusted Root CA (Минцифры)
+ENV NODE_EXTRA_CA_CERTS=/app/certs/russian_trusted_root_ca.crt
 
 EXPOSE 3000
 ENTRYPOINT ["/entrypoint.sh"]

@@ -15,6 +15,12 @@ const emit = defineEmits<{
   logout: []
 }>()
 
+const { isInsideMax } = useMaxAuth()
+const showLogout = ref(true)
+onMounted(() => {
+  showLogout.value = !isInsideMax()
+})
+
 const STAGE_HINT: Record<LessonStage, string> = {
   learn: 'Урок · шаг 1 из 3: учим новые слова',
   quiz: 'Урок · шаг 2 из 3: проверка, нужно 100%',
@@ -142,6 +148,7 @@ const progressPct = computed(() => {
         </div>
 
         <button
+          v-if="showLogout"
           class="text-xs font-bold text-[#9a7ab0] py-1 cursor-pointer"
           @click="emit('logout')"
         >

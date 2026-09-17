@@ -41,7 +41,7 @@ const progressPct = computed(() => {
     <div class="home-glow pointer-events-none absolute inset-0" aria-hidden="true" />
 
     <div class="flex-1 min-h-0 relative z-10 app-screen-x overflow-hidden">
-      <div class="absolute top-[6%] left-0 right-0 z-10 flex flex-col gap-2 sm:gap-2.5 pointer-events-none">
+      <div class="absolute top-[6%] left-0 right-0 z-10 flex flex-col gap-2 sm:gap-2.5 pointer-events-none app-screen-x">
         <div class="home-greeting self-start max-w-[78%] animate-bounce-in pointer-events-auto">
           <div class="home-bubble w-fit rounded-[1.25rem] px-3.5 py-2.5 relative">
             <p class="text-[0.95rem] sm:text-lg text-[#6b4f8a] font-extrabold leading-snug tracking-tight">

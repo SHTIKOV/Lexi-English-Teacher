@@ -25,6 +25,8 @@ make dev         # hot reload
 | `make seed` | Перезалить словарь |
 | `make migrate` | Применить схему |
 | `make shell` / `make db-shell` | Shell / psql |
+| `make remind` | Ручная рассылка напоминаний |
+| `make deploy` | Деплой на `shtikoff` (rsync + rebuild) |
 | `make clean` | Удалить volumes |
 
 ## Вход только через MAX
@@ -59,20 +61,22 @@ make dev         # hot reload
 
 ## Деплой
 
-Нужен **HTTPS**-домен (требование MAX для URL мини-приложения):
+Прод: `lexi.shtikoff.ru` на хосте `shtikoff` (Docker + nginx).
 
 ```bash
-cp .env.example .env   # prod: MAX_BOT_TOKEN, без MAX_DEV_BYPASS
-make up
+make deploy
+# или: make deploy DEPLOY_HOST=shtikoff DEPLOY_PATH=/home/profipark/lexi.shtikoff.ru
 ```
 
-Поставь reverse-proxy (Caddy/Nginx) на контейнер `app`.
+Скрипт `scripts/deploy.sh`: rsync кода (без `.env`) → `docker compose up -d --build --force-recreate app` → проверка `/api/auth/features`.
+
+Первый раз на сервере: `.env` с `MAX_BOT_TOKEN`, `NUXT_SESSION_PASSWORD`, `SESSION_COOKIE_SECURE=1`, `APP_PORT=3010`, nginx + HTTPS.
 
 ## Ежедневные напоминания в MAX
 
 Раз в день бот пишет каждому реальному пользователю (пропускает `anon-*` / `test-*`) случайное сообщение из ~10 шаблонов с числом выученных слов и следующим подарком.
 
 - Эндпоинт: `POST /api/cron/daily-reminders` (заголовок `Authorization: Bearer $CRON_SECRET`)
-- На сервере cron (10:00 MSK): см. деплой
+- На сервере cron (**08:00 MSK**): `/etc/cron.d/lexi-daily-reminders`
 - Ручной запуск: `make remind`
 - `?force=1` — повторно сегодня

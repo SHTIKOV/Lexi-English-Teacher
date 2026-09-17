@@ -1,7 +1,13 @@
-.PHONY: help up down rebuild logs shell db-shell seed migrate status dev stop clean remind
+.PHONY: help up down rebuild logs shell db-shell seed migrate status dev stop clean remind deploy
 
 COMPOSE = docker compose
 COMPOSE_DEV = docker compose -f docker-compose.yml -f docker-compose.dev.yml
+
+# Production deploy (override if needed):
+#   make deploy DEPLOY_HOST=shtikoff DEPLOY_PATH=/home/profipark/lexi.shtikoff.ru
+DEPLOY_HOST ?= shtikoff
+DEPLOY_PATH ?= /home/profipark/lexi.shtikoff.ru
+DEPLOY_APP_PORT ?= 3010
 
 help:
 	@echo "Lexi — Docker commands"
@@ -18,6 +24,7 @@ help:
 	@echo "  make seed      Re-seed word blocks (wipes catalog)"
 	@echo "  make migrate   Push Drizzle schema"
 	@echo "  make remind    Send daily Max reminders now (force)"
+	@echo "  make deploy    Rsync + rebuild on $(DEPLOY_HOST)"
 	@echo "  make clean     Down + remove volumes (DATA LOSS)"
 
 up:
@@ -58,6 +65,10 @@ remind:
 	@set -a; . ./.env; set +a; \
 	curl -fsS -X POST "http://127.0.0.1:$${APP_PORT:-3000}/api/cron/daily-reminders?force=1" \
 	  -H "Authorization: Bearer $${CRON_SECRET}"
+
+deploy:
+	DEPLOY_HOST=$(DEPLOY_HOST) DEPLOY_PATH=$(DEPLOY_PATH) DEPLOY_APP_PORT=$(DEPLOY_APP_PORT) \
+		bash scripts/deploy.sh
 
 clean:
 	$(COMPOSE) down -v

@@ -1,35 +1,60 @@
 /**
  * Max WebViews often drop session cookies (especially on IP / self-signed HTTPS).
- * When a request has no session but includes X-Max-Init-Data, validate and create one.
+ * When a request has no session but includes X-Max-Init-Data, validate and attach user.
  */
 import { eq } from 'drizzle-orm'
 import { getUserSession, setUserSession } from '#imports'
+import type { SessionUser } from '#shared/types'
 import { useDb } from '../db/client'
 import { users } from '../db/schema'
 import { toSessionUser } from '../utils/auth'
 import { validateMaxInitData } from '../utils/maxAuth'
+
+declare module 'h3' {
+  interface H3EventContext {
+    lexiUser?: SessionUser
+  }
+}
 
 export default defineEventHandler(async (event) => {
   const path = getRequestURL(event).pathname
   if (!path.startsWith('/api/')) return
   if (path.startsWith('/api/auth/max')) return
   if (path.startsWith('/api/auth/features')) return
+  if (path.startsWith('/api/auth/logout')) return
   if (path.startsWith('/api/cron/')) return
 
   try {
     const session = await getUserSession(event)
-    if (session?.user) return
+    if (session?.user?.id && session.user.maxId) {
+      event.context.lexiUser = session.user as SessionUser
+      return
+    }
   }
   catch {
     // continue — try initData
   }
 
-  const initData = getHeader(event, 'x-max-init-data')?.trim()
-  if (!initData) return
+  const rawHeader = getHeader(event, 'x-max-init-data')?.trim()
+  if (!rawHeader) return
+
+  let initData = rawHeader
+  try {
+    // Client may send encodeURIComponent(initData)
+    if (rawHeader.includes('%')) {
+      initData = decodeURIComponent(rawHeader)
+    }
+  }
+  catch {
+    initData = rawHeader
+  }
 
   const config = useRuntimeConfig()
   const botToken = process.env.MAX_BOT_TOKEN || String(config.maxBotToken || '')
-  if (!botToken) return
+  if (!botToken) {
+    console.error('[max-init-auth] MAX_BOT_TOKEN missing')
+    return
+  }
 
   try {
     const { user: maxUser } = validateMaxInitData(initData, botToken)
@@ -63,7 +88,9 @@ export default defineEventHandler(async (event) => {
       row = created
     }
 
-    await setUserSession(event, { user: toSessionUser(row) })
+    const sessionUser = toSessionUser(row)
+    event.context.lexiUser = sessionUser
+    await setUserSession(event, { user: sessionUser })
   }
   catch (err) {
     console.error('[max-init-auth]', err)

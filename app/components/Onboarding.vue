@@ -79,6 +79,7 @@ async function saveName() {
   await $fetch('/api/profile', {
     method: 'PATCH',
     body: { childName: name },
+    headers: maxAuthHeaders(),
   })
   await fetchSession()
   return true
@@ -106,7 +107,7 @@ async function next() {
       return
     }
     if (isLast.value) {
-      await $fetch('/api/onboarding/complete', { method: 'POST' })
+      await $fetch('/api/onboarding/complete', { method: 'POST', headers: maxAuthHeaders() })
       await fetchSession()
       emit('done')
       return

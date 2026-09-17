@@ -1,4 +1,5 @@
 import type { Reward } from '#shared/types'
+import { maxAuthHeaders } from '~/utils/maxHeaders'
 
 export function useRewards() {
   const rewards = useState<Reward[]>('user-rewards', () => [])
@@ -8,7 +9,9 @@ export function useRewards() {
   async function refresh() {
     pending.value = true
     try {
-      const res = await $fetch<{ rewards: Reward[] }>('/api/rewards')
+      const res = await $fetch<{ rewards: Reward[] }>('/api/rewards', {
+        headers: maxAuthHeaders(),
+      })
       rewards.value = res.rewards
       loaded.value = true
     }
@@ -22,6 +25,7 @@ export function useRewards() {
     const res = await $fetch<{ reward: Reward }>('/api/rewards', {
       method: 'POST',
       body: payload,
+      headers: maxAuthHeaders(),
     })
     await refresh()
     return res.reward
@@ -31,13 +35,17 @@ export function useRewards() {
     const res = await $fetch<{ reward: Reward }>(`/api/rewards/${id}`, {
       method: 'PATCH',
       body: payload,
+      headers: maxAuthHeaders(),
     })
     await refresh()
     return res.reward
   }
 
   async function remove(id: number) {
-    await $fetch(`/api/rewards/${id}`, { method: 'DELETE' })
+    await $fetch(`/api/rewards/${id}`, {
+      method: 'DELETE',
+      headers: maxAuthHeaders(),
+    })
     await refresh()
   }
 
@@ -45,6 +53,7 @@ export function useRewards() {
     const res = await $fetch<{ rewards: Reward[]; loaded: boolean }>('/api/rewards/load-defaults', {
       method: 'POST',
       body: { replace },
+      headers: maxAuthHeaders(),
     })
     rewards.value = res.rewards
     loaded.value = true

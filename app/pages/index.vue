@@ -1,13 +1,31 @@
 <script setup lang="ts">
 const { user, clear, fetch: fetchSession } = useUserSession()
 const { catalog, pending, refresh, rewards } = useCatalog()
+const { ensureAuth, isInsideMax, loadFeatures } = useMaxAuth()
 
-await refresh()
+const ready = ref(false)
+const bootError = ref('')
+
+onMounted(async () => {
+  try {
+    await loadFeatures()
+    if (isInsideMax()) {
+      await ensureAuth()
+      await fetchSession()
+    }
+    await refresh()
+    ready.value = true
+  }
+  catch (e: unknown) {
+    const err = e as { data?: { statusMessage?: string }; statusMessage?: string; message?: string }
+    bootError.value = err?.data?.statusMessage || err?.statusMessage || err?.message || 'Ошибка загрузки'
+  }
+})
 
 const showOnboarding = computed(() => Boolean(user.value) && !user.value?.onboardingCompleted)
 
 async function logout() {
-  await $fetch('/api/auth/logout', { method: 'POST' })
+  await $fetch('/api/auth/logout', { method: 'POST', headers: maxAuthHeaders() })
   await clear()
   await navigateTo('/login')
 }
@@ -23,7 +41,16 @@ async function onOnboardingDone() {
 </script>
 
 <template>
-  <div v-if="pending && !catalog" class="app-screen flex items-center justify-center">
+  <div v-if="bootError" class="app-screen flex flex-col items-center justify-center px-6 gap-3">
+    <p class="text-red-500 font-bold text-center">{{ bootError }}</p>
+    <button
+      class="px-4 py-3 rounded-2xl font-extrabold text-white bg-gradient-to-r from-purple-400 to-pink-500"
+      @click="() => { bootError = ''; ready = false; location.reload() }"
+    >
+      Попробовать снова
+    </button>
+  </div>
+  <div v-else-if="!ready || (pending && !catalog)" class="app-screen flex items-center justify-center">
     <p class="text-3xl animate-float">🌟</p>
   </div>
   <template v-else>

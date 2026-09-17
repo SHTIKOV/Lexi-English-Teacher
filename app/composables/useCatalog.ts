@@ -1,4 +1,5 @@
 import type { LessonStage, ProgressStage, Reward, Word } from '#shared/types'
+import { maxAuthHeaders } from '~/utils/maxHeaders'
 
 export interface CurrentCatalog {
   currentBlock: {
@@ -25,8 +26,9 @@ export function useCatalog() {
   async function refresh() {
     pending.value = true
     try {
+      const headers = maxAuthHeaders()
       const [cat] = await Promise.all([
-        $fetch<CurrentCatalog>('/api/catalog/current'),
+        $fetch<CurrentCatalog>('/api/catalog/current', { headers }),
         refreshRewards(),
       ])
       catalog.value = cat
@@ -42,6 +44,7 @@ export function useCatalog() {
     await $fetch('/api/progress', {
       method: 'PATCH',
       body: { stage, blockId },
+      headers: maxAuthHeaders(),
     })
     return refresh()
   }
@@ -51,6 +54,7 @@ export function useCatalog() {
     await $fetch('/api/progress/reset', {
       method: 'POST',
       body: { blockId },
+      headers: maxAuthHeaders(),
     })
     return refresh()
   }

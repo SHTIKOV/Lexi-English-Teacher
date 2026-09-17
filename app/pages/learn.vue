@@ -2,6 +2,7 @@
 import type { Word } from '#shared/types'
 
 const { catalog, refresh, completeStage, resetProgress } = useCatalog()
+const headers = maxAuthHeaders()
 
 const learnedBlocks = ref<{ id: number; title: string; words: Word[] }[]>([])
 const allWords = ref<Word[]>([])
@@ -9,8 +10,8 @@ const allWords = ref<Word[]>([])
 await refresh()
 
 const [{ blocks }, wordsPayload] = await Promise.all([
-  $fetch<{ blocks: { id: number; title: string; words: Word[] }[] }>('/api/catalog/learned'),
-  $fetch<{ all: Word[] }>('/api/words/all'),
+  $fetch<{ blocks: { id: number; title: string; words: Word[] }[] }>('/api/catalog/learned', { headers }),
+  $fetch<{ all: Word[] }>('/api/words/all', { headers }),
 ])
 learnedBlocks.value = blocks
 allWords.value = wordsPayload.all
@@ -21,9 +22,10 @@ const stage = computed(() => catalog.value?.stage ?? 'learn')
 async function onComplete(stageName: 'learn' | 'quiz' | 'play') {
   await completeStage(stageName)
   if (stageName === 'play') {
-    const learned = await $fetch<{ blocks: typeof learnedBlocks.value }>('/api/catalog/learned')
+    const h = maxAuthHeaders()
+    const learned = await $fetch<{ blocks: typeof learnedBlocks.value }>('/api/catalog/learned', { headers: h })
     learnedBlocks.value = learned.blocks
-    const words = await $fetch<{ all: Word[] }>('/api/words/all')
+    const words = await $fetch<{ all: Word[] }>('/api/words/all', { headers: h })
     allWords.value = words.all
   }
 }

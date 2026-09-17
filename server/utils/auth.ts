@@ -4,12 +4,18 @@ import { users } from '../db/schema'
 import type { SessionUser } from '#shared/types'
 
 export async function requireUser(event: Parameters<typeof requireUserSession>[0]) {
-  const session = await requireUserSession(event)
-  const user = session.user as SessionUser | undefined
-  if (!user?.id || !user.maxId) {
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+  const fromContext = event.context.lexiUser as SessionUser | undefined
+  if (fromContext?.id && fromContext.maxId) {
+    return fromContext
   }
-  return user
+
+  const session = await getUserSession(event)
+  const user = session.user as SessionUser | undefined
+  if (user?.id && user.maxId) {
+    return user
+  }
+
+  throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
 }
 
 export async function getDbUser(userId: number) {

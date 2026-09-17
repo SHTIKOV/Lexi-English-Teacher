@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { Word } from '#shared/types'
 
-const wordsPayload = await $fetch<{ learned: Word[]; all: Word[] }>('/api/words/all')
+const wordsPayload = await $fetch<{ learned: Word[]; all: Word[] }>('/api/words/all', {
+  headers: maxAuthHeaders(),
+})
 const words = computed(() => (
   wordsPayload.learned.length >= 2 ? wordsPayload.learned : wordsPayload.all
 ))

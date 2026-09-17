@@ -4,7 +4,9 @@ import type { Word } from '#shared/types'
 const { catalog, refresh } = useCatalog()
 await refresh()
 
-const wordsPayload = await $fetch<{ all: Word[]; remaining: Word[] }>('/api/words/all')
+const wordsPayload = await $fetch<{ all: Word[]; remaining: Word[] }>('/api/words/all', {
+  headers: maxAuthHeaders(),
+})
 const words = computed(() => catalog.value?.currentBlock?.words ?? wordsPayload.remaining.slice(0, 20))
 const allWords = computed(() => wordsPayload.all)
 

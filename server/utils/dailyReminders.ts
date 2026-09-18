@@ -114,17 +114,27 @@ export async function sendDailyReminders(options?: {
       wordsLeft,
     })
 
-    const result = await sendMaxMessageToUser(user.maxId, text, {
-      openAppText: 'Открыть Lexi',
-    })
+    const MAX_ATTEMPTS = 3
+    let result: Awaited<ReturnType<typeof sendMaxMessageToUser>> | null = null
 
-    if (!result.ok) {
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      result = await sendMaxMessageToUser(user.maxId, text, {
+        openAppText: 'Открыть Lexi',
+      })
+      if (result.ok) break
+      if (attempt < MAX_ATTEMPTS) {
+        // Back off before retry (network blips like today's "fetch failed")
+        await new Promise((r) => setTimeout(r, 800 * attempt))
+      }
+    }
+
+    if (!result?.ok) {
       report.failed.push({
         userId: user.id,
         maxId: user.maxId,
-        error: `${result.status}: ${result.error}`,
+        error: `${result?.status ?? 0}: ${result?.error ?? 'unknown'}`,
       })
-      // Don't stamp lastReminderAt on failure — retry next run
+      // Don't stamp lastReminderAt on failure — retry next cron run
       await new Promise((r) => setTimeout(r, 400))
       continue
     }

@@ -151,6 +151,13 @@ const progressPct = computed(() => {
         </div>
 
         <button
+          class="home-btn home-btn-ghost home-btn-rating w-full rounded-[1.15rem] text-sm sm:text-base font-extrabold text-[#7c5cbf] active:scale-[0.98] transition-transform cursor-pointer"
+          @click="emit('navigate', '/rating')"
+        >
+          Рейтинг
+        </button>
+
+        <button
           v-if="showLogout"
           class="text-xs font-bold text-[#9a7ab0] py-1 cursor-pointer"
           @click="emit('logout')"

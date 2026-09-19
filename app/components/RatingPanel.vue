@@ -12,6 +12,12 @@ defineProps<{
 
 const emit = defineEmits<{ back: [] }>()
 
+const { isInsideMax } = useMaxAuth()
+const useMaxName = ref(false)
+onMounted(() => {
+  useMaxName.value = isInsideMax()
+})
+
 const MEDALS = ['🥇', '🥈', '🥉'] as const
 
 function wordsLabel(count: number): string {
@@ -20,6 +26,13 @@ function wordsLabel(count: number): string {
   if (mod10 === 1 && mod100 !== 11) return 'слово'
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'слова'
   return 'слов'
+}
+
+function entryName(entry: RankedUser): string {
+  if (useMaxName.value) {
+    return entry.displayName || entry.childName || 'Ученик'
+  }
+  return entry.childName || entry.displayName || 'Ученик'
 }
 
 function initial(name: string): string {
@@ -88,7 +101,7 @@ function gapAfterIndex(entries: RankedUser[], showGap: boolean): number {
               <img
                 v-if="entry.avatarUrl"
                 :src="entry.avatarUrl"
-                :alt="entry.childName"
+                :alt="entryName(entry)"
                 class="w-full h-full object-cover"
                 loading="lazy"
                 referrerpolicy="no-referrer"
@@ -96,19 +109,16 @@ function gapAfterIndex(entries: RankedUser[], showGap: boolean): number {
               <span
                 v-else
                 class="text-sm font-black text-[#7c5cbf]"
-              >{{ initial(entry.childName || entry.displayName) }}</span>
+              >{{ initial(entryName(entry)) }}</span>
             </div>
 
             <div class="min-w-0 flex-1">
               <p class="text-sm font-extrabold text-[#5c4a6e] truncate">
-                {{ entry.childName || entry.displayName }}
+                {{ entryName(entry) }}
                 <span
                   v-if="entry.userId === meUserId"
                   class="ml-1 text-[10px] font-black uppercase tracking-wide text-[#c45d8a]"
                 >ты</span>
-              </p>
-              <p class="text-[11px] font-bold text-[#9a7ab0] truncate">
-                {{ entry.displayName }}
               </p>
             </div>
 
